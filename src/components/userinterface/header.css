@@ -1,0 +1,71 @@
+/* header.css */
+
+/* Header Styling */
+.bg-blue-500 {
+    background-color: #3b82f6; /* Tailwind's blue-500 */
+    color: white;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Navigation Bar */
+  .bg-blue-700 {
+    background-color: #1e40af; /* Tailwind's blue-700 */
+    padding: 4px 10px;
+    display: flex;
+    justify-content: space-between;
+    
+    align-items: center;
+  }
+  
+  /* Dropdown Styling */
+  .relative {
+    position: relative;
+    
+  }
+  
+  .absolute {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+  
+  .absolute a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .absolute a:hover {
+    background: #f3f4f6; /* Light gray hover effect */
+  }
+  
+  /* Navigation Links */
+  nav a {
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Search Box */
+  input[type="text"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 150px;
+  }
+  
+  
