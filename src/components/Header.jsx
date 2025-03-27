@@ -14,7 +14,9 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',
   borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
   transition: 'background-color 0.3s ease-in-out',
-  position: 'sticky',
+  position: 'fixed',
+  width: '100%',
+  zIndex: 1100,
 }));
 
 const ScrolledAppBar = styled(AppBar)(({ theme }) => ({
@@ -23,6 +25,9 @@ const ScrolledAppBar = styled(AppBar)(({ theme }) => ({
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
   borderBottom: 'none',
   transition: 'all 0.3s ease-in-out',
+  position: 'fixed',
+  width: '100%',
+  zIndex: 1100,
 }));
 
 const LogoContainer = styled(Typography)(({ theme }) => ({
