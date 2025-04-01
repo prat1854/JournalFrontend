@@ -136,12 +136,12 @@ const Sidebar = () => (
     <div className="journal-detail">
       <h2>JOURNAL DETAIL</h2>
       <div className="yellow-line"></div>
-      <div className="cover-image">
-        <img src="journal-cover.jpg" alt="Journal Cover" />
+      <div className="cover-image" style={{width:"10", height:"10"}} >
+        <img src="cover.jpg" alt="Journal Cover" />
       </div>
       <div className="journal-info">
         <p><strong>ISSN:</strong> Applied</p>
-        <p><strong>Editor-in-Chief:</strong> Dr Kamal Sharma</p>
+        <p><strong>Editor-in-Chief:</strong> Dr Rajeev Kansal</p>
       </div>
     </div>
     <div className="downloads">
