@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box, Container, IconButton, Menu, MenuItem, useMediaQuery } from '@mui/material';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box, Container, IconButton, Menu, MenuItem, useMediaQuery, Avatar } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -122,8 +122,42 @@ const NavButton = styled(Button)(({ theme, active }) => ({
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [issueMenuAnchor, setIssueMenuAnchor] = useState(null);
+  const [homeMenuAnchor, setHomeMenuAnchor] = useState(null);
+  const [authorMenuAnchor, setAuthorMenuAnchor] = useState(null);
+  const [mobileIssueMenuOpen, setMobileIssueMenuOpen] = useState(false);
+  const [mobileHomeMenuOpen, setMobileHomeMenuOpen] = useState(false);
+  const [mobileAuthorMenuOpen, setMobileAuthorMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width:900px)');
+
+  // Check if user is logged in
+  useEffect(() => {
+    // Check localStorage for user authentication token
+    const token = localStorage.getItem('userToken');
+    setIsLoggedIn(!!token);
+  }, [refresh, location.pathname]); // Add refresh state and location.pathname to dependencies
+
+  // Function to refresh the authentication status
+  const refreshAuthStatus = () => {
+    setRefresh(prev => !prev);
+  };
+
+  useEffect(() => {
+    // Set up event listener for login events
+    window.addEventListener('login', refreshAuthStatus);
+    
+    // Check auth status on mount
+    refreshAuthStatus();
+    
+    return () => {
+      window.removeEventListener('login', refreshAuthStatus);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,17 +169,102 @@ const Header = () => {
 
   const handleMenu = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
+  
+  const handleUserMenu = (event) => setUserMenuAnchorEl(event.currentTarget);
+  const handleUserMenuClose = () => setUserMenuAnchorEl(null);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('userToken');
+    setIsLoggedIn(false);
+    handleUserMenuClose();
+    refreshAuthStatus(); // Refresh auth status after logout
+    navigate('/');
+  };
+  
+  const handleSubmissionClick = (event, closeMenu) => {
+    if (!isLoggedIn) {
+      event.preventDefault();
+      alert('Please login to make a submission');
+      closeMenu();
+      navigate('/login');
+    } else {
+      closeMenu();
+    }
+  };
+  
+  const handleIssueMenuOpen = (event) => {
+    setIssueMenuAnchor(event.currentTarget);
+  };
+
+  const handleIssueMenuClose = () => {
+    setIssueMenuAnchor(null);
+  };
+  
+  const handleHomeMenuOpen = (event) => {
+    setHomeMenuAnchor(event.currentTarget);
+  };
+
+  const handleHomeMenuClose = () => {
+    setHomeMenuAnchor(null);
+  };
+  
+  const handleAuthorMenuOpen = (event) => {
+    setAuthorMenuAnchor(event.currentTarget);
+  };
+
+  const handleAuthorMenuClose = () => {
+    setAuthorMenuAnchor(null);
+  };
+  
   const isActive = (path) => location.pathname === path;
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Articles', path: '/articles' },
-    { name: 'Journal Overview', path: '/JournalOverview' },
-    { name: 'About the Journal', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', path: '/', dropdown: true,
+      subItems: [
+        { name: 'About the Journal', path: '/about' },
+        { name: 'Contact', path: '/contact' },
+      ],
+    },
+    { name: 'Editorial Team', path: '/editorial-team' },
+    { name: 'Issues',dropdown: true,
+     subItems: [
+        { name: 'CURRENT', path: '/issues/current' },
+        { name: 'ARCHIVE', path: '/issues/archive' },
+      ],
+    },
+    { name: 'For Author', path: '/my-author',dropdown: true,
+      subItems: [
+        { name: 'Announcements', path: '/announcements' },
+        { name: 'Author Guidelines', path: '/AuthorGuidelines' },
+        { name: 'Submission Guidelines', path: '/SubmissionTemplate' },
+        {name: 'Research Ethics Guidelines', path: '/ResearchEthicsGuidelines'},
+        {name: 'submissions', path: '/titlesubmission'},
+      ],
+     },
+
+    { name: 'Indexing & Metrics'
+    }
   ];
 
   const RenderAppBar = scrolled ? ScrolledAppBar : StyledAppBar;
+
+  const toggleMobileIssueMenu = () => {
+    setMobileIssueMenuOpen(!mobileIssueMenuOpen);
+    setMobileHomeMenuOpen(false);
+    setMobileAuthorMenuOpen(false);
+  };
+
+  const toggleMobileHomeMenu = () => {
+    setMobileHomeMenuOpen(!mobileHomeMenuOpen);
+    setMobileIssueMenuOpen(false);
+    setMobileAuthorMenuOpen(false);
+  };
+
+  const toggleMobileAuthorMenu = () => {
+    setMobileAuthorMenuOpen(!mobileAuthorMenuOpen);
+    setMobileHomeMenuOpen(false);
+    setMobileIssueMenuOpen(false);
+  };
 
   return (
     <div className="header-container">
@@ -156,14 +275,7 @@ const Header = () => {
               <LogoContainer variant="h6" component={Link} to="/" sx={{ textDecoration: 'none' }} className="header-logo">
                 Global Journal 
               </LogoContainer>
-              {!isMobile && (
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase placeholder="Search articles…" inputProps={{ 'aria-label': 'search' }} style={{ color: '#2d3436' }} />
-                </Search>
-              )}
+             
             </Box>
             {isMobile ? (
               <Box sx={{ flexGrow: 0 }}>
@@ -172,31 +284,232 @@ const Header = () => {
                 </IconButton>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
                   {navItems.map((item) => (
-                    <MenuItem key={item.name} onClick={handleClose} component={Link} to={item.path} selected={isActive(item.path)}>
-                      {item.name}
-                    </MenuItem>
+                    item.dropdown ? (
+                      <div key={item.name}>
+                        <MenuItem 
+                          onClick={
+                            item.name === 'Home' 
+                              ? toggleMobileHomeMenu 
+                              : item.name === 'Issues' 
+                                ? toggleMobileIssueMenu 
+                                : item.name === 'For Author'
+                                  ? toggleMobileAuthorMenu
+                                  : null
+                          }
+                          sx={{ 
+                            fontWeight: item.subItems?.some(subItem => isActive(subItem.path)) ? 600 : 400,
+                            color: item.subItems?.some(subItem => isActive(subItem.path)) ? '#d32f2f' : 'inherit'
+                          }}
+                        >
+                          {item.name}
+                        </MenuItem>
+                        {((item.name === 'Home' && mobileHomeMenuOpen) || 
+                          (item.name === 'Issues' && mobileIssueMenuOpen) ||
+                          (item.name === 'For Author' && mobileAuthorMenuOpen)) && (
+                          <Box sx={{ pl: 2, bgcolor: 'rgba(0,0,0,0.02)' }}>
+                            {item.subItems?.map((subItem) => (
+                              <MenuItem 
+                                key={subItem.name} 
+                                onClick={(event) => {
+                                  if (subItem.name === 'submissions') {
+                                    handleSubmissionClick(event, handleClose);
+                                  } else {
+                                    handleClose();
+                                  }
+                                }} 
+                                component={Link} 
+                                to={subItem.name === 'submissions' && !isLoggedIn ? '#' : subItem.path}
+                                selected={isActive(subItem.path)}
+                                sx={{ 
+                                  py: 1,
+                                  fontSize: '0.9rem',
+                                  color: isActive(subItem.path) ? '#d32f2f' : 'inherit'
+                                }}
+                              >
+                                {subItem.name}
+                              </MenuItem>
+                            ))}
+                          </Box>
+                        )}
+                      </div>
+                    ) : (
+                      <MenuItem key={item.name} onClick={handleClose} component={Link} to={item.path} selected={isActive(item.path)}>
+                        {item.name}
+                      </MenuItem>
+                    )
                   ))}
-                  <MenuItem onClick={handleClose} component={Link} to="/login">
-                    Login
-                  </MenuItem>
+                  {!isLoggedIn ? (
+                    <>
+                      <MenuItem onClick={handleClose} component={Link} to="/login">
+                        Login
+                      </MenuItem>
+                      <MenuItem onClick={handleClose} component={Link} to="/signup">
+                        Sign Up
+                      </MenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <MenuItem onClick={handleClose} component={Link} to="/profile">
+                        My Profile
+                      </MenuItem>
+                      <MenuItem onClick={handleClose} component={Link} to="/titlesubmission">
+                        Make a Submission
+                      </MenuItem>
+                      <MenuItem onClick={() => {handleClose(); handleLogout();}}>
+                        Logout
+                      </MenuItem>
+                    </>
+                  )}
                 </Menu>
               </Box>
             ) : (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box sx={{ mr: 2 }}>
                   {navItems.map((item) => (
-                    <NavButton key={item.name} active={isActive(item.path)} component={Link} to={item.path}>
-                      {item.name}
-                    </NavButton>
+                    item.dropdown ? (
+                      <Box 
+                        key={item.name} 
+                        sx={{ display: 'inline-block', position: 'relative' }}
+                      >
+                        <NavButton 
+                          active={item.subItems?.some(subItem => isActive(subItem.path))}
+                          aria-owns={item.name === 'Home' ? 'home-menu' : item.name === 'Issues' ? 'issue-menu' : 'author-menu'}
+                          aria-haspopup="true"
+                          onClick={item.name === 'Home' ? handleHomeMenuOpen : item.name === 'Issues' ? handleIssueMenuOpen : handleAuthorMenuOpen}
+                        >
+                          {item.name}
+                        </NavButton>
+                        <Menu
+                          id={item.name === 'Home' ? 'home-menu' : item.name === 'Issues' ? 'issue-menu' : 'author-menu'}
+                          anchorEl={item.name === 'Home' ? homeMenuAnchor : item.name === 'Issues' ? issueMenuAnchor : authorMenuAnchor}
+                          open={item.name === 'Home' ? Boolean(homeMenuAnchor) : item.name === 'Issues' ? Boolean(issueMenuAnchor) : Boolean(authorMenuAnchor)}
+                          onClose={item.name === 'Home' ? handleHomeMenuClose : item.name === 'Issues' ? handleIssueMenuClose : handleAuthorMenuClose}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                          PaperProps={{
+                            elevation: 2,
+                            sx: { 
+                              mt: 0.5,
+                              minWidth: 150,
+                              borderRadius: '4px',
+                            }
+                          }}
+                        >
+                          {item.subItems?.map((subItem) => (
+                            <MenuItem 
+                              key={subItem.name} 
+                              onClick={(event) => {
+                                if (subItem.name === 'submissions') {
+                                  handleSubmissionClick(event, item.name === 'Home' ? handleHomeMenuClose : item.name === 'Issues' ? handleIssueMenuClose : handleAuthorMenuClose);
+                                } else {
+                                  item.name === 'Home' ? handleHomeMenuClose() : item.name === 'Issues' ? handleIssueMenuClose() : handleAuthorMenuClose();
+                                }
+                              }} 
+                              component={Link} 
+                              to={subItem.name === 'submissions' && !isLoggedIn ? '#' : subItem.path}
+                              selected={isActive(subItem.path)}
+                              sx={{ 
+                                color: isActive(subItem.path) ? '#d32f2f' : 'inherit',
+                                fontSize: '0.9rem',
+                                py: 1
+                              }}
+                            >
+                              {subItem.name}
+                            </MenuItem>
+                          ))}
+                        </Menu>
+                      </Box>
+                    ) : (
+                      <NavButton key={item.name} active={isActive(item.path)} component={Link} to={item.path}>
+                        {item.name}
+                      </NavButton>
+                    )
                   ))}
                 </Box>
                 <Box sx={{ display: 'flex' }}>
-                  <IconButton color="#fff" size="small" sx={{ ml: 1 }}>
-                    <BookmarkBorderIcon />
-                  </IconButton>
-                  <IconButton color="#fff" size="small" sx={{ ml: 1 }} component={Link} to="/login">
-                    <AccountCircleIcon />
-                  </IconButton>
+                  {/* <IconButton color="#fff" size="small" sx={{ ml: 1 }}> */}
+                    {/* <BookmarkBorderIcon /> */}
+                  {/* </IconButton> */}
+                  {isLoggedIn ? (
+                    <>
+                      <IconButton 
+                        color="primary" 
+                        size="small" 
+                        sx={{ 
+                          ml: 1,
+                          bgcolor: '#f0f2f5',
+                          '&:hover': {
+                            bgcolor: '#e4e6e8',
+                          },
+                          padding: '8px'
+                        }}
+                        onClick={handleUserMenu}
+                      >
+                        <AccountCircleIcon sx={{ color: '#d32f2f' }} />
+                      </IconButton>
+                      <Menu
+                        anchorEl={userMenuAnchorEl}
+                        open={Boolean(userMenuAnchorEl)}
+                        onClose={handleUserMenuClose}
+                      >
+                        <MenuItem component={Link} to="/profile" onClick={handleUserMenuClose}>
+                          My Profile
+                        </MenuItem>
+                        <MenuItem component={Link} to="/titlesubmission" onClick={handleUserMenuClose}>
+                          Make a Submission
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="text"
+                        size="small"
+                        sx={{ 
+                          ml: 1,
+                          color: '#d32f2f',
+                          '&:hover': {
+                            backgroundColor: 'rgba(211, 47, 47, 0.04)'
+                          },
+                          textTransform: 'none',
+                          fontWeight: 500
+                        }} 
+                        component={Link} 
+                        to="/login"
+                      >
+                        Login
+                      </Button>
+                      <Button 
+                        variant="outlined"
+                        size="small"
+                        sx={{ 
+                          ml: 1,
+                          borderColor: '#d32f2f',
+                          color: '#d32f2f',
+                          '&:hover': {
+                            borderColor: '#b71c1c',
+                            backgroundColor: 'rgba(211, 47, 47, 0.04)'
+                          },
+                          textTransform: 'none',
+                          fontWeight: 500
+                        }} 
+                        component={Link} 
+                        to="/signup"
+                      >
+                        Sign Up
+                      </Button>
+                    </>
+                  )}
+                  
                 </Box>
               </Box>
             )}

@@ -5,71 +5,53 @@ import Login from '../src/components/userinterface/login';
 import ResetPassword from './components/userinterface/ResetPassword';
 import SignUp from './components/userinterface/SignUp';
 import Contact from './components/userinterface/contact';
-import HeaderDemo from './components/userinterface/HeaderDemo';
 import Header from './components/Header';
 import About from './components/userinterface/about';
-import { Typography } from '@mui/material';
+import MyProfile from './components/userinterface/MyProfile';
+import EditProfile from './components/userinterface/EditProfile';
+import TitleSubmission from './components/userinterface/TitleSubmission';
+import SubmissionDetail from './components/userinterface/SubmissionDetail';
+import SubmissionUpload from './components/userinterface/SubmissionUpload';
+import SubmissionContributors from './components/userinterface/SubmissionContributors';
+import SubmissionEditors from './components/userinterface/SubmissionEditors';
+import SubmissionReview from './components/userinterface/SubmissionReview';
+import AuthorGuidelines from './components/userinterface/AuthorGuidelines';
+import SubmissionTemplate from './components/userinterface/SubmissionTemplate';
+import EditorialTeam from './components/userinterface/EditorialTeam';
+import ResearchEthicsGuidelines from './components/userinterface/ResearchEthicsGuidelines';
+import Submissions from './components/userinterface/Submissions';
+
 
 function App() {
   return (
     <div>
       <Router>
-        {/* Header is included globally for all routes except HeaderDemo which has its own header */}
+        {/* Header is included globally for all routes
+         */}
+         <Header />
         <Routes>
-          <Route path="/header-demo" element={<HeaderDemo />} />
-          <Route path="/" element={
-            <>
-              <Header />
-              <Homepage />
-      
-            </>
-          } />
-          <Route path="/login" element={
-            <>
-              <Header />
-              <Login />
-            </>
-          } />
-          <Route path="/reset-password" element={
-            <>
-              <Header />
-              <ResetPassword />
-            </>
-          } />
-          <Route path="/signup" element={
-            <>
-              <Header />
-              <SignUp />
-            </>
-          } />
-          <Route path="/contact" element={
-            <>
-              <Header />
-              <Contact />
-            </>
-          } />
-          <Route path="/about" element={
-            <>
-              <Header />
-              <About />
-            </>
-          } />
-          <Route path="/articles" element={
-            <>
-              <Header />
-              <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-                Articles Page (Under Construction)
-              </Typography>
-            </>
-          } />
-          <Route path="/JournalOverview" element={
-            <>
-              <Header />
-              <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-                Journal Overview Page (Under Construction)
-              </Typography>
-            </>
-          } />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} /> 
+          <Route path="/profile" element={<MyProfile />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/titlesubmission" element={<TitleSubmission />} />
+          <Route path="/submission-detail" element={<SubmissionDetail />} />
+          <Route path="/submission-upload" element={<SubmissionUpload />} />
+          <Route path="/submission-contributors" element={<SubmissionContributors />} />
+          <Route path="/submission-editors" element={<SubmissionEditors />} />
+          <Route path="/submission-review" element={<SubmissionReview />} />
+          <Route path="/editorial-team" element={<EditorialTeam />} />
+          <Route path="/author-guidelines" element={<AuthorGuidelines />} />
+          <Route path="/submission-template" element={<SubmissionTemplate />} />
+          <Route path="/research-ethics-guidelines" element={<ResearchEthicsGuidelines />} />
+          <Route path="/AuthorGuidelines" element={<AuthorGuidelines />} />
+          <Route path="/SubmissionTemplate" element={<SubmissionTemplate />} />
+          <Route path="/ResearchEthicsGuidelines" element={<ResearchEthicsGuidelines />} />
+          <Route path="/submissions" element={<Submissions />} />
         </Routes>
       </Router>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Container, CssBaseline, Avatar, Typography, TextField, Button, Box, Paper, 
-  FormControlLabel, Checkbox, Grid, InputAdornment, IconButton, Link
+  FormControlLabel, Checkbox, Grid, InputAdornment, IconButton, Link, MenuItem, Autocomplete
 } from '@mui/material';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -13,11 +13,75 @@ import PublicIcon from '@mui/icons-material/Public';
 import LockIcon from '@mui/icons-material/Lock';
 import { useNavigate } from 'react-router-dom';
 
+
+
 export default function SignUpPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
+
+  
+  const countries = [
+    "Select",   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua & Deps", "Argentina", "Armenia", "Australia", "Austria",
+    "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+    "Bolivia", "Bosnia Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina", "Burundi", "Cambodia", "Cameroon",
+    "Canada", "Cape Verde", "Central African Rep", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Congo {Democratic Rep}",
+    "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+    "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland",
+    "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
+    "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland {Republic}", "Israel",
+    "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea North", "Korea South", "Kosovo",
+    "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+    "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
+    "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar, {Burma}", "Namibia",
+    "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palau",
+    "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russian Federation",
+    "Rwanda", "St Kitts & Nevis", "St Lucia", "Saint Vincent & the Grenadines", "Samoa", "San Marino", "Sao Tome & Principe",
+    "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands",
+    "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland",
+    "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey",
+    "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay",
+    "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+  ];
+
+  const institutions = [
+    "Indian Institute of Technology Bombay",
+    "Indian Institute of Technology Delhi",
+    "Indian Institute of Technology Kanpur",
+    "Indian Institute of Technology Madras",
+    "Indian Institute of Technology Kharagpur",
+    "National Institute of Technology Trichy",
+    "National Institute of Technology Surathkal",
+    "Delhi Technological University",
+    "Birla Institute of Technology and Science, Pilani",
+    "Vellore Institute of Technology",
+    "Amity University",
+    "Jawaharlal Nehru University",
+    "University of Delhi",
+    "Banaras Hindu University",
+    "Aligarh Muslim University",
+    "Jamia Millia Islamia",
+    "Savitribai Phule Pune University",
+    "Jadavpur University",
+    "University of Hyderabad",
+    "Manipal Academy of Higher Education",
+    "Anna University",
+    "SRM Institute of Science and Technology",
+    "Lovely Professional University",
+    "Shiv Nadar University",
+    "Ashoka University",
+    "Christ University",
+    "Tata Institute of Social Sciences",
+    "Indian Statistical Institute",
+    "Indian Institute of Science, Bangalore",
+    "Indian Institute of Management Ahmedabad",
+    "Indian Institute of Management Bangalore",
+    "Madhav Institute of Technology and Science "
+  ];
+  
+
+
   const [formData, setFormData] = useState({
     givenName: '',
     familyName: '',
@@ -104,11 +168,55 @@ export default function SignUpPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
-      console.log('Form submitted successfully:', formData);
-      // Here you would typically make an API call to register the user
-      // For now we'll just show a success message and redirect
-      alert('Account created successfully!');
-      navigate('/login');
+      // Prepare data to send in the format expected by the backend
+      const dataToSend = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        name: `${formData.givenName} ${formData.familyName}`.trim(),
+        affiliation: formData.affiliation,
+        country: formData.country,
+        orcidId: formData.orcidId || undefined, // Send undefined if empty
+        areasOfInterest: formData.areasOfInterest || undefined, // Send undefined if empty
+        agreeToPrivacy: formData.agreeToPrivacy
+      };
+      
+      try {
+        // Send form data to backend API
+        fetch('http://localhost:5000/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(dataToSend),
+          mode: 'cors'
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(data => {
+                throw new Error(data.message || `Server error: ${response.status}`);
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+         //   console.log('Registration successful:', data);
+            alert('Account created successfully!');
+            if (data.token) {
+              localStorage.setItem('userToken', data.token);
+              window.dispatchEvent(new Event('login'));
+            }
+            navigate('/login');
+          })
+          .catch(error => {
+        //    console.error('Registration error:', error);
+            alert(error.message || 'Registration failed. Please try again.');
+          });
+      } catch (error) {
+      //  console.error('Network error:', error);
+        alert('Network error! Please check if your backend server is running.');
+      }
     }
   };
 
@@ -317,26 +425,46 @@ export default function SignUpPage() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    label="Affiliation / Institution *"
-                    name="affiliation"
+                  <Autocomplete
+                    freeSolo
+                    options={institutions}
                     value={formData.affiliation}
-                    onChange={handleChange}
-                    error={!!errors.affiliation}
-                    helperText={errors.affiliation}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <BusinessIcon color="primary" />
-                        </InputAdornment>
-                      ),
+                    onChange={(event, newValue) => {
+                      handleChange({
+                        target: { name: 'affiliation', value: newValue || '' }
+                      });
                     }}
+                    onInputChange={(event, newInputValue) => {
+                      handleChange({
+                        target: { name: 'affiliation', value: newInputValue }
+                      });
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Affiliation / Institution *"
+                        required
+                        fullWidth
+                        error={!!errors.affiliation}
+                        helperText={errors.affiliation}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <React.Fragment>
+                              <InputAdornment position="start">
+                                <BusinessIcon color="primary" />
+                              </InputAdornment>
+                              {params.InputProps.startAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
+                      />
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    select
                     required
                     fullWidth
                     label="Country *"
@@ -352,7 +480,13 @@ export default function SignUpPage() {
                         </InputAdornment>
                       ),
                     }}
-                  />
+                  >
+                    {countries.map((country) => (
+                      <MenuItem key={country} value={country}>
+                        {country}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField

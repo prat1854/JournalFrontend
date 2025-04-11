@@ -17,7 +17,7 @@ const Contact = () => {
           <i className="fas fa-phone contact-icon"></i>
           <h3 className="info-title">PHONE NUMBER</h3>
           <p>+91-9319250172</p>
-          <p>+91-8077281918</p>
+          <p>+91-6261068377</p>
         </div>
         <div className="contact-info-box">
           <i className="fas fa-envelope contact-icon"></i>

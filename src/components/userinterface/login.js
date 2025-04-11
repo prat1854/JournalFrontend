@@ -5,13 +5,51 @@ import EmailIcon from '@mui/icons-material/Email';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
+import ApiService from '../../Services/FetchNodeAdminServices';
 
 export default function SignInPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setError('');
+    
+    // Simple validation
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
+    
+    // Use ApiService instead of direct fetch
+    ApiService.login({ email, password })
+      .then(response => {
+        // Store token from backend
+        localStorage.setItem('userToken', response.data.token);
+        
+        // Dispatch login event to refresh header
+        window.dispatchEvent(new Event('login'));
+        
+        // Navigate to profile page after successful login
+        navigate('/profile');
+      })
+      .catch(error => {
+        console.error('Login error:', error);
+        if (error.code === 'ERR_NETWORK') {
+          setError('Unable to connect to the server. Please try again later.');
+        } else if (error.response) {
+          setError(error.response.data.message || 'Invalid email or password');
+        } else {
+          setError('An unexpected error occurred. Please try again.');
+        }
+      });
+  };
 
   return (
     <Box
@@ -65,22 +103,33 @@ export default function SignInPage() {
               textAlign: 'center'
             }}
           >
-            Sign in to access your Golbal Journal
+            Sign in to access your Global Journal
           </Typography>
-          <Box component="form" noValidate sx={{ width: '100%' }}>
-          <TextField
-  margin="normal"
-  required
-  fullWidth
-  id="email"
-  label="Email Address"
-  name="email"
-  autoComplete="email"
-  variant="outlined"
-  InputProps={{
-  
-  }}
-/>
+          {error && (
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                mb: 2,
+                color: 'error.main',
+                textAlign: 'center'
+              }}
+            >
+              {error}
+            </Typography>
+          )}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <TextField
               margin="normal"
               required
@@ -90,6 +139,8 @@ export default function SignInPage() {
               type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
                   <IconButton
