@@ -5,7 +5,7 @@ import {
   Grid, useTheme, CircularProgress
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useRequireAuth } from '../../utils/authUtils';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
@@ -43,14 +43,49 @@ export default function SubmissionDetail() {
   const [keywords, setKeywords] = useState('');
   const [abstract, setAbstract] = useState('');
   const [activeStep, setActiveStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [submission, setSubmission] = useState(null);
   const theme = useTheme();
   const navigate = useNavigate();
+  const { submissionId } = useParams();
   
   // Use our custom auth hook to require authentication
   const isAuthenticated = useRequireAuth(true, true);
 
+  useEffect(() => {
+    // If we have a submissionId, fetch the submission details
+    if (submissionId) {
+      setLoading(true);
+      // For now, we're using mock data. In a real app, you would fetch from API
+      // Example: ApiService.getSubmissionById(submissionId)
+      setTimeout(() => {
+        // Mock response - replace with actual API call
+        const mockSubmission = {
+          id: parseInt(submissionId),
+          title: 'Pushkar',
+          subtitle: 'tester submission',
+          abstract: 'This is a sample abstract for the submission. It would contain details about the research paper.',
+          keywords: 'test, submission, example',
+          status: 'Incomplete',
+          lastActivity: 'Saturday, April 12, 2025'
+        };
+        
+        setSubmission(mockSubmission);
+        setTitle(mockSubmission.title);
+        setKeywords(mockSubmission.keywords);
+        setAbstract(mockSubmission.abstract);
+        setLoading(false);
+      }, 1000);
+    }
+  }, [submissionId]);
+
   // If authentication is still being checked, show loading
   if (isAuthenticated === false) {
+    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}><CircularProgress /></Box>;
+  }
+
+  // If we're loading submission data, show loading
+  if (submissionId && loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}><CircularProgress /></Box>;
   }
 
@@ -64,9 +99,28 @@ export default function SubmissionDetail() {
   };
   
   const handleContinue = () => {
-    // Save form data and navigate to upload page
-    // Here you would typically save the form data to your backend or state management
-    navigate('/submission-upload');
+    // Save form data to localStorage before navigating
+    try {
+      const detailsData = {
+        title,
+        keywords: keywords.split(',').map(keyword => keyword.trim()),
+        abstract
+      };
+      
+      localStorage.setItem('submissionDetails', JSON.stringify(detailsData));
+      
+      // If we don't have a current submission ID, generate one
+      if (!localStorage.getItem('currentSubmissionId')) {
+        const submissionId = Date.now().toString();
+        localStorage.setItem('currentSubmissionId', submissionId);
+      }
+      
+      // Navigate to upload page
+      navigate('/submission-upload');
+    } catch (error) {
+      console.error('Error saving submission details:', error);
+      alert('An error occurred while saving your submission details. Please try again.');
+    }
   };
 
   return (
@@ -87,7 +141,9 @@ export default function SubmissionDetail() {
       </Box>
       
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h4" component="h1">Make a Submission: Details</Typography>
+        <Typography variant="h4" component="h1">
+          {submissionId ? `Submission: ${title}` : 'Make a Submission: Details'}
+        </Typography>
         <Button 
           variant="outlined" 
           onClick={saveLater}
@@ -129,6 +185,7 @@ export default function SubmissionDetail() {
               onChange={(e) => setTitle(e.target.value)}
               required
               sx={{ mb: 1 }}
+              disabled={!!submissionId}
             />
           </Box>
           
@@ -146,6 +203,7 @@ export default function SubmissionDetail() {
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               sx={{ mb: 1 }}
+              disabled={!!submissionId}
             />
           </Box>
           
@@ -179,26 +237,45 @@ export default function SubmissionDetail() {
               value={abstract}
               onChange={(e) => setAbstract(e.target.value)}
               required
+              disabled={!!submissionId}
             />
           </Box>
           
           <Divider sx={{ my: 4 }} />
           
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleContinue}
-              sx={{ 
-                px: 4,
-                py: 1,
-                borderRadius: '40px',
-                textTransform: 'none',
-                fontSize: '1rem'
-              }}
-            >
-              Save and Continue
-            </Button>
+            {!submissionId ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleContinue}
+                sx={{ 
+                  px: 4,
+                  py: 1,
+                  borderRadius: '40px',
+                  textTransform: 'none',
+                  fontSize: '1rem'
+                }}
+              >
+                Save and Continue
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to={`/submission-upload`}
+                sx={{ 
+                  px: 4,
+                  py: 1,
+                  borderRadius: '40px',
+                  textTransform: 'none',
+                  fontSize: '1rem'
+                }}
+              >
+                Next: Upload Files
+              </Button>
+            )}
           </Box>
         </Box>
       </StyledPaper>

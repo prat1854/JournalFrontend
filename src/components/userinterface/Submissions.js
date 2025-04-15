@@ -12,6 +12,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRequireAuth } from '../../utils/authUtils';
+import ApiService from '../../Services/FetchNodeAdminServices';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -51,24 +52,42 @@ const StatusChip = styled(Chip)(({ status, theme }) => ({
 export default function Submissions({ isEmbedded = false }) {
   const [tabValue, setTabValue] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState({});
+  const [submissionList, setSubmissionList] = useState([]);
   const navigate = useNavigate();
-
-  // Mock data - would be fetched from API in real implementation
-  const mockSubmissions = [
-    {
-      id: 14,
-      title: 'Pushkar',
-      subtitle: 'tester submission',
-      status: 'Incomplete',
-      lastActivity: 'Saturday, April 12, 2025'
-    }
-  ];
 
   // Always call the hook unconditionally
   // When embedded, we don't need to redirect (first param is false)
   // When not embedded, we do want to show alerts (second param is true)
   const isAuthenticated = useRequireAuth(!isEmbedded, !isEmbedded);
+
+  // Fetch submissions when component mounts
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        setLoading(true);
+        // Call the API to get submissions
+        const response = await ApiService.post('/api/getsubmissions', {});
+        
+        if (response.success && response.submissions) {
+          setSubmissionList(response.submissions);
+        } else {
+          // If there's no submissions or API unsuccessful
+          setSubmissionList([]);
+        }
+      } catch (error) {
+        console.error('Error fetching submissions:', error);
+        setSubmissionList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchSubmissions();
+    }
+  }, [isAuthenticated]);
 
   // If embedded or authenticated, continue rendering
   // Otherwise, the hook will handle redirecting
@@ -81,12 +100,54 @@ export default function Submissions({ isEmbedded = false }) {
   };
 
   const handleViewSubmission = (submissionId) => {
-    navigate(`/submission-detail/${submissionId}`);
+    // Store the submissionId in localStorage to access it in the submission review page
+    localStorage.setItem('currentSubmissionId', submissionId);
+    // Navigate to the submission review page
+    navigate('/submission-review');
   };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
+
+  const toggleExpand = (id) => {
+    setExpanded(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      // Call API to delete the submission
+      const response = await ApiService.post('/api/deletesubmission', { submissionId: id });
+      
+      if (response.success) {
+        // Remove from local state if API call was successful
+        setSubmissionList(prev => prev.filter(submission => (submission.id || submission._id) !== id));
+      } else {
+        alert('Failed to delete submission. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+      alert('An error occurred while deleting the submission.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter submissions based on search query
+  const filteredSubmissions = submissionList.filter(submission => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      (submission.title && submission.title.toLowerCase().includes(searchLower)) ||
+      (submission.abstract && submission.abstract.toLowerCase().includes(searchLower)) ||
+      (submission.keywords && submission.keywords.some(keyword => 
+        keyword.toLowerCase().includes(searchLower)
+      ))
+    );
+  });
 
   // Choose the appropriate container and Paper component based on whether the component is embedded
   const PaperComponent = isEmbedded ? EmbeddedStyledPaper : StyledPaper;
@@ -114,7 +175,7 @@ export default function Submissions({ isEmbedded = false }) {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label={<Box sx={{ display: 'flex', alignItems: 'center' }}>My Queue <Chip size="small" label="1" sx={{ ml: 1, height: 20, fontSize: '0.75rem' }} /></Box>} />
+          <Tab label={<Box sx={{ display: 'flex', alignItems: 'center' }}>My Queue <Chip size="small" label={submissionList.length} sx={{ ml: 1, height: 20, fontSize: '0.75rem' }} /></Box>} />
           <Tab label="Archived" />
         </Tabs>
       </Box>
@@ -143,7 +204,7 @@ export default function Submissions({ isEmbedded = false }) {
             color="primary"
             startIcon={<AddIcon />}
             component={Link}
-            to="/newsubmission"
+            to="/titlesubmission"
             sx={{ textTransform: 'none' }}
           >
             New Submission
@@ -157,69 +218,97 @@ export default function Submissions({ isEmbedded = false }) {
       </Box>
 
       <PaperComponent>
-        {tabValue === 0 && (
-          <Box>
-            {mockSubmissions.map((submission) => (
-              <Box 
-                key={submission.id}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  py: 2,
-                  borderBottom: '1px solid #eaeaea'
-                }}
-              >
-                <Box>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    {submission.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {submission.subtitle}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <StatusChip 
-                    label={submission.status} 
-                    status={submission.status}
-                    size="small"
-                  />
-                  <Button 
-                    variant="outlined"
-                    onClick={() => handleViewSubmission(submission.id)}
-                    sx={{ ml: 2, textTransform: 'none' }}
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {tabValue === 0 && (
+              <Box>
+                {filteredSubmissions.length > 0 ? filteredSubmissions.map((submission) => (
+                  <Box 
+                    key={submission.id || submission._id}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      py: 2,
+                      borderBottom: '1px solid #eaeaea'
+                    }}
                   >
-                    View
-                  </Button>
-                  <IconButton size="small" sx={{ ml: 1 }}>
-                    <KeyboardArrowDownIcon />
-                  </IconButton>
-                </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="subtitle1" fontWeight="medium">
+                          {submission.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {submission.abstract ? submission.abstract.substring(0, 100) + '...' : 'No abstract available'}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <StatusChip 
+                          label={submission.status || "Submitted"} 
+                          status={submission.status || "Submitted"}
+                          size="small"
+                        />
+                        <Button 
+                          variant="outlined"
+                          onClick={() => handleViewSubmission(submission.id || submission._id)}
+                          sx={{ ml: 2, textTransform: 'none' }}
+                        >
+                          View
+                        </Button>
+                        <IconButton 
+                          size="small" 
+                          sx={{ ml: 1 }}
+                          onClick={() => toggleExpand(submission.id || submission._id)}
+                        >
+                          {expanded[submission.id || submission._id] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                      </Box>
+                    </Box>
+                    
+                    {expanded[submission.id || submission._id] && (
+                      <>
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="body2">
+                            <strong>Keywords:</strong> {submission.keywords ? submission.keywords.join(', ') : 'No keywords available'}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                            Last activity recorded on {submission.updatedAt ? new Date(submission.updatedAt).toLocaleDateString() : new Date().toLocaleDateString()}.
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }}>
+                          <Button 
+                            color="secondary" 
+                            variant="outlined"
+                            onClick={() => handleDelete(submission.id || submission._id)}
+                            sx={{ textTransform: 'none' }}
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      </>
+                    )}
+                  </Box>
+                )) : (
+                  <Box sx={{ py: 4, textAlign: 'center' }}>
+                    <Typography variant="body1" color="text.secondary">
+                      No submissions found in your queue.
+                    </Typography>
+                  </Box>
+                )}
               </Box>
-            ))}
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="body2" color="text.secondary">
-                Last activity recorded on {mockSubmissions[0].lastActivity}.
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }}>
-              <Button 
-                color="secondary" 
-                variant="outlined"
-                sx={{ textTransform: 'none' }}
-              >
-                Delete
-              </Button>
-            </Box>
-          </Box>
-        )}
+            )}
 
-        {tabValue === 1 && (
-          <Box sx={{ py: 4, textAlign: 'center' }}>
-            <Typography variant="body1" color="text.secondary">
-              No archived submissions found.
-            </Typography>
-          </Box>
+            {tabValue === 1 && (
+              <Box sx={{ py: 4, textAlign: 'center' }}>
+                <Typography variant="body1" color="text.secondary">
+                  No archived submissions found.
+                </Typography>
+              </Box>
+            )}
+          </>
         )}
       </PaperComponent>
     </ContentWrapper>

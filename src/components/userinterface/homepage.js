@@ -195,15 +195,6 @@ const NavButton = styled(Button)(({ theme, active }) => ({
 const MainContent = () => {
   const navigate = useNavigate();
   
-  const handleSubmissionClick = () => {
-    if (!isLoggedIn()) {
-      alert('Please login to make a submission');
-      navigate('/login');
-    } else {
-      navigate('/newsubmission');
-    }
-  };
-
   return (
     <Box 
       sx={{ ...slideUp, animationDelay: '300ms' }}
@@ -376,29 +367,6 @@ const MainContent = () => {
             </Typography>
           </Grid>
         </Grid>
-        
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Button 
-            variant="contained" 
-            color="primary"
-            size="large"
-            onClick={handleSubmissionClick}
-            sx={{ 
-              px: 4, 
-              py: 1.5, 
-              borderRadius: '40px',
-              textTransform: 'none',
-              fontWeight: 600,
-              fontSize: '1.1rem',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              '&:hover': {
-                boxShadow: '0 6px 16px rgba(0,0,0,0.2)'
-              }
-            }}
-          >
-            Make a Submission
-          </Button>
-        </Box>
       </Box>
     </Box>
   );

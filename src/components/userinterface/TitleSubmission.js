@@ -98,12 +98,12 @@ export default function TitleSubmission() {
     setSubmissionError(null);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/submissions/submit', {
+      const response = await axios.post('http://localhost:5000/api/titlesubmission/submit', {
         title,
         submitted_by: 1
       });
     
-      console.log('✅ Response from backend:', response.data);
+      //console.log('✅ Response from backend:', response.data);
       // Navigate to the submission detail page instead of showing an alert
       navigate('/submission-detail');
     } catch (error) {

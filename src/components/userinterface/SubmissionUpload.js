@@ -109,8 +109,23 @@ export default function SubmissionUpload() {
   };
 
   const handleContinue = () => {
-    // Navigate to the contributors page
-    navigate('/submission-contributors');
+    // Save files data to localStorage before navigating
+    try {
+      // Convert File objects to storable format
+      const filesData = files.map(file => ({
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        type: file.type.includes('pdf') ? 'Manuscript' : 'Supplementary Material'
+      }));
+      
+      localStorage.setItem('submissionFiles', JSON.stringify(filesData));
+      
+      // Navigate to the contributors page
+      navigate('/submission-contributors');
+    } catch (error) {
+      console.error('Error saving files data:', error);
+      alert('An error occurred while saving your files. Please try again.');
+    }
   };
 
   const handleDeleteFile = (indexToDelete) => {

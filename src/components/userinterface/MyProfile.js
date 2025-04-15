@@ -81,7 +81,10 @@ export default function MyProfile() {
     // Check if user is logged in
     const token = localStorage.getItem('userToken');
     if (!token) {
-      navigate('/login');
+      setError('Authentication failed. Please login again.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
       return;
     }
 
@@ -119,8 +122,14 @@ export default function MyProfile() {
         }
         setLoading(false);
       } catch (err) {
-      //  console.error('Error fetching profile data:', err);
-        if (err.code === 'ERR_NETWORK') {
+        // Check if the error is related to authentication
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          localStorage.removeItem('userToken'); // Clear invalid token
+          setError('Authentication failed. Please login again.');
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000); // Redirect after showing message briefly
+        } else if (err.code === 'ERR_NETWORK') {
           setError('Unable to connect to the server. Please check if the backend is running.');
         } else if (err.message) {
           setError(err.message);
@@ -155,10 +164,16 @@ export default function MyProfile() {
   if (error) {
     return (
       <Container maxWidth="md" sx={{ py: 8 }}>
-        <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>
-        <Button variant="contained" onClick={() => navigate('/')}>
-          Back to Home
-        </Button>
+        <Alert severity="error" sx={{ mb: 3, fontSize: '1.1rem', fontWeight: 'medium' }}>{error}</Alert>
+        {error.includes('Authentication failed') ? (
+          <Button variant="contained" onClick={() => navigate('/login')} sx={{ mt: 2 }}>
+            Go to Login
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>
+            Back to Home
+          </Button>
+        )}
       </Container>
     );
   }

@@ -352,6 +352,9 @@ const Header = () => {
                       <MenuItem onClick={handleClose} component={Link} to="/profile">
                         My Profile
                       </MenuItem>
+                      <MenuItem onClick={handleClose} component={Link} to="/submissions">
+                        My Submissions
+                      </MenuItem>
                       <MenuItem onClick={handleClose} component={Link} to="/titlesubmission">
                         Make a Submission
                       </MenuItem>
@@ -460,6 +463,9 @@ const Header = () => {
                       >
                         <MenuItem component={Link} to="/profile" onClick={handleUserMenuClose}>
                           My Profile
+                        </MenuItem>
+                        <MenuItem component={Link} to="/submissions" onClick={handleUserMenuClose}>
+                          My Submissions
                         </MenuItem>
                         <MenuItem component={Link} to="/titlesubmission" onClick={handleUserMenuClose}>
                           Make a Submission

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container, Box, Paper, Typography, Button, 
   Stepper, Step, StepLabel, Divider, useTheme,
@@ -12,6 +12,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
+import ErrorIcon from '@mui/icons-material/Error';
+import ApiService from '../../Services/FetchNodeAdminServices';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -23,14 +25,104 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 export default function SubmissionReview() {
   const [activeStep, setActiveStep] = useState(4); // Fifth and final step in the stepper
+  const [loading, setLoading] = useState(true);
+  const [submissionDetails, setSubmissionDetails] = useState(null);
+  const [validationStatus, setValidationStatus] = useState({
+    details: false,
+    files: false,
+    contributors: false,
+    editorComments: false
+  });
+  const [isAllValid, setIsAllValid] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
   
   // Use our custom auth hook to require authentication
   const isAuthenticated = useRequireAuth(true, true);
 
+  useEffect(() => {
+    // Function to fetch all submission data
+    const fetchSubmissionData = async () => {
+      try {
+        setLoading(true);
+        
+        // In a real implementation, you would fetch from API using a submission ID
+        // For now, let's get the data from localStorage if it exists
+        const submissionId = localStorage.getItem('currentSubmissionId');
+        let detailsData, filesData, contributorsData, editorData;
+        
+        // Get details from localStorage
+        const storedDetails = localStorage.getItem('submissionDetails');
+        detailsData = storedDetails ? JSON.parse(storedDetails) : {
+          title: "The Impact of Artificial Intelligence on Legal Decision Making",
+          abstract: "This paper explores the intersection of AI and legal frameworks, examining how machine learning algorithms are being employed in judicial processes and the ethical implications thereof.",
+          keywords: ["Artificial Intelligence", "Legal Ethics", "Judicial Process", "Machine Learning"],
+        };
+        
+        // Get files from localStorage
+        const storedFiles = localStorage.getItem('submissionFiles');
+        filesData = storedFiles ? JSON.parse(storedFiles) : [
+          { name: "manuscript.pdf", size: "2.4 MB", type: "Manuscript" },
+          { name: "supplementary_data.xlsx", size: "1.1 MB", type: "Supplementary Material" }
+        ];
+        
+        // Get contributors from localStorage
+        const storedContributors = localStorage.getItem('submissionContributors');
+        contributorsData = storedContributors ? JSON.parse(storedContributors) : [
+          { name: "Prateek Sunil", affiliation: "MITS", role: "Author, Primary Contact" },
+          { name: "Jane Doe", affiliation: "Harvard Law School", role: "Co-Author" }
+        ];
+        
+        // Get editor comments from localStorage
+        const storedEditorComments = localStorage.getItem('submissionEditorComments');
+        editorData = storedEditorComments || "This paper builds on our previous work in the field of AI ethics, specifically addressing recent developments in automated legal decision-making systems.";
+        
+        // Combine all data
+        const combinedData = {
+          ...detailsData,
+          files: filesData,
+          contributors: contributorsData,
+          editorComments: editorData
+        };
+        
+        setSubmissionDetails(combinedData);
+        
+        // Validate all sections
+        validateSubmission(combinedData);
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching submission data:', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchSubmissionData();
+  }, []);
+
+  // Function to validate all submission sections
+  const validateSubmission = (data) => {
+    const validation = {
+      details: Boolean(data.title && data.abstract && data.keywords && data.keywords.length > 0),
+      files: Boolean(data.files && data.files.length > 0),
+      contributors: Boolean(data.contributors && data.contributors.length > 0),
+      editorComments: Boolean(data.editorComments && data.editorComments.trim() !== '')
+    };
+    
+    setValidationStatus(validation);
+    
+    // Check if all sections are valid
+    const allValid = Object.values(validation).every(value => value === true);
+    setIsAllValid(allValid);
+  };
+
   // If authentication is still being checked, show loading
   if (isAuthenticated === false) {
+    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}><CircularProgress /></Box>;
+  }
+  
+  // If data is still loading, show loading spinner
+  if (loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}><CircularProgress /></Box>;
   }
 
@@ -47,26 +139,47 @@ export default function SubmissionReview() {
     navigate('/submission-editors');
   };
 
-  const handleSubmit = () => {
-    // Submit the manuscript
-    alert('Your submission has been successfully submitted!');
-    navigate('/newsubmission');
+  const handleSubmit = async () => {
+    try {
+      if (!isAllValid) {
+        alert('Please complete all required sections before submitting.');
+        return;
+      }
+
+      setLoading(true);
+
+      // Send data to backend
+      const response = await ApiService.post('/api/makesubmissions', submissionDetails);
+
+      if (response.success) {
+        // Clear localStorage after successful submission
+        localStorage.removeItem('submissionDetails');
+        localStorage.removeItem('submissionFiles');
+        localStorage.removeItem('submissionContributors');
+        localStorage.removeItem('submissionEditorComments');
+        localStorage.removeItem('currentSubmissionId');
+
+        alert('Your submission has been successfully submitted!');
+        navigate('/submissions');
+      } else {
+        alert('Submission failed. Please try again.');
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      alert('An error occurred while submitting. Please try again.');
+      setLoading(false);
+    }
   };
 
-  // Mock data for review
-  const submissionDetails = {
-    title: "The Impact of Artificial Intelligence on Legal Decision Making",
-    abstract: "This paper explores the intersection of AI and legal frameworks, examining how machine learning algorithms are being employed in judicial processes and the ethical implications thereof.",
-    keywords: ["Artificial Intelligence", "Legal Ethics", "Judicial Process", "Machine Learning"],
-    files: [
-      { name: "manuscript.pdf", size: "2.4 MB", type: "Manuscript" },
-      { name: "supplementary_data.xlsx", size: "1.1 MB", type: "Supplementary Material" }
-    ],
-    contributors: [
-      { name: "Prateek Sunil", affiliation: "MITS", role: "Author, Primary Contact" },
-      { name: "Jane Doe", affiliation: "Harvard Law School", role: "Co-Author" }
-    ],
-    editorComments: "This paper builds on our previous work in the field of AI ethics, specifically addressing recent developments in automated legal decision-making systems."
+  // Render validation status icon for each section
+  const renderValidationIcon = (isValid) => {
+    if (isValid) {
+      return <CheckCircleIcon color="success" sx={{ ml: 1 }} />;
+    } else {
+      return <ErrorIcon color="error" sx={{ ml: 1 }} />;
+    }
   };
 
   return (
@@ -120,12 +233,17 @@ export default function SubmissionReview() {
           {/* Submission Details Section */}
           <Card sx={{ mb: 3, border: '1px solid', borderColor: 'divider' }}>
             <CardHeader
-              title="Submission Details"
+              title={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6">Submission Details</Typography>
+                  {renderValidationIcon(validationStatus.details)}
+                </Box>
+              }
               action={
                 <Button
                   startIcon={<EditIcon />}
                   sx={{ textTransform: 'none' }}
-                  onClick={() => navigate('/newsubmission')}
+                  onClick={() => navigate('/submission-detail')}
                 >
                   Edit
                 </Button>
@@ -134,13 +252,13 @@ export default function SubmissionReview() {
             />
             <CardContent>
               <Typography variant="h6" component="h3" gutterBottom>
-                {submissionDetails.title}
+                {submissionDetails?.title}
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                <strong>Abstract:</strong> {submissionDetails.abstract}
+                <strong>Abstract:</strong> {submissionDetails?.abstract}
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                {submissionDetails.keywords.map((keyword, index) => (
+                {submissionDetails?.keywords?.map((keyword, index) => (
                   <Box 
                     key={index} 
                     sx={{ 
@@ -161,7 +279,12 @@ export default function SubmissionReview() {
           {/* Files Section */}
           <Card sx={{ mb: 3, border: '1px solid', borderColor: 'divider' }}>
             <CardHeader
-              title="Files"
+              title={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6">Files</Typography>
+                  {renderValidationIcon(validationStatus.files)}
+                </Box>
+              }
               action={
                 <Button
                   startIcon={<EditIcon />}
@@ -175,7 +298,7 @@ export default function SubmissionReview() {
             />
             <CardContent>
               <List sx={{ p: 0 }}>
-                {submissionDetails.files.map((file, index) => (
+                {submissionDetails?.files?.map((file, index) => (
                   <ListItem 
                     key={index}
                     sx={{ 
@@ -208,7 +331,12 @@ export default function SubmissionReview() {
           {/* Contributors Section */}
           <Card sx={{ mb: 3, border: '1px solid', borderColor: 'divider' }}>
             <CardHeader
-              title="Contributors"
+              title={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6">Contributors</Typography>
+                  {renderValidationIcon(validationStatus.contributors)}
+                </Box>
+              }
               action={
                 <Button
                   startIcon={<EditIcon />}
@@ -222,7 +350,7 @@ export default function SubmissionReview() {
             />
             <CardContent>
               <List sx={{ p: 0 }}>
-                {submissionDetails.contributors.map((contributor, index) => (
+                {submissionDetails?.contributors?.map((contributor, index) => (
                   <ListItem 
                     key={index}
                     sx={{ 
@@ -258,7 +386,12 @@ export default function SubmissionReview() {
           {/* Editor Comments Section */}
           <Card sx={{ mb: 3, border: '1px solid', borderColor: 'divider' }}>
             <CardHeader
-              title="Comments for the Editor"
+              title={
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6">Comments for the Editor</Typography>
+                  {renderValidationIcon(validationStatus.editorComments)}
+                </Box>
+              }
               action={
                 <Button
                   startIcon={<EditIcon />}
@@ -272,7 +405,7 @@ export default function SubmissionReview() {
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {submissionDetails.editorComments}
+                {submissionDetails?.editorComments}
               </Typography>
             </CardContent>
           </Card>
@@ -281,14 +414,25 @@ export default function SubmissionReview() {
             p: 3, 
             mb: 4, 
             borderRadius: theme.shape.borderRadius, 
-            bgcolor: 'rgba(76, 175, 80, 0.08)',
+            bgcolor: isAllValid ? 'rgba(76, 175, 80, 0.08)' : 'rgba(211, 47, 47, 0.08)',
             display: 'flex',
             alignItems: 'center'
           }}>
-            <CheckCircleIcon color="success" sx={{ mr: 2 }} />
-            <Typography>
-              All required information has been provided. Your submission is ready to be submitted.
-            </Typography>
+            {isAllValid ? (
+              <>
+                <CheckCircleIcon color="success" sx={{ mr: 2 }} />
+                <Typography>
+                  All required information has been provided. Your submission is ready to be submitted.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <ErrorIcon color="error" sx={{ mr: 2 }} />
+                <Typography>
+                  Please complete all required sections before submitting.
+                </Typography>
+              </>
+            )}
           </Box>
           
           <Divider sx={{ my: 4 }} />
@@ -331,6 +475,7 @@ export default function SubmissionReview() {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
+                disabled={loading || !isAllValid}
                 sx={{ 
                   px: 4,
                   py: 1,
@@ -339,7 +484,7 @@ export default function SubmissionReview() {
                   fontSize: '1rem'
                 }}
               >
-                Submit
+                {loading ? <CircularProgress size={24} /> : 'Submit'}
               </Button>
             </Box>
           </Box>

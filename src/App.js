@@ -40,6 +40,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/titlesubmission" element={<TitleSubmission />} />
           <Route path="/submission-detail" element={<SubmissionDetail />} />
+          <Route path="/submission-detail/:submissionId" element={<SubmissionDetail />} />
           <Route path="/submission-upload" element={<SubmissionUpload />} />
           <Route path="/submission-contributors" element={<SubmissionContributors />} />
           <Route path="/submission-editors" element={<SubmissionEditors />} />
