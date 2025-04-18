@@ -20,6 +20,9 @@ import SubmissionTemplate from './components/userinterface/SubmissionTemplate';
 import EditorialTeam from './components/userinterface/EditorialTeam';
 import ResearchEthicsGuidelines from './components/userinterface/ResearchEthicsGuidelines';
 import Submissions from './components/userinterface/Submissions';
+import Announcements from './components/userinterface/Announcements';
+import Current from './components/userinterface/issues/Current';
+import Archive from './components/userinterface/issues/Archive';
 
 
 function App() {
@@ -53,6 +56,9 @@ function App() {
           <Route path="/SubmissionTemplate" element={<SubmissionTemplate />} />
           <Route path="/ResearchEthicsGuidelines" element={<ResearchEthicsGuidelines />} />
           <Route path="/submissions" element={<Submissions />} />
+          <Route path="/announcements" element={<Announcements />} />
+          <Route path="/issues/current" element={<Current />} />
+          <Route path="/issues/archive" element={<Archive />} />
         </Routes>
       </Router>
     </div>

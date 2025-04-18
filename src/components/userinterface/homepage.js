@@ -288,71 +288,71 @@ const HeroSection = () => {
   );
 };
 
-// New Stats Bar Component
-const StatsBar = () => {
-  return (
-    <Box
-      sx={{
-        mb: 6,
-        ...slideUp,
-        animationDelay: '500ms'
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          borderRadius: 3,
-          py: 2,
-          px: 4,
-          background: 'linear-gradient(90deg, #1E3A8A 0%, #304B9C 100%)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <Box
-          component="img"
-          src="https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-          alt="Stats Background"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.1
-          }}
-        />
-        <Grid container spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
-          <Grid item xs={6} sm={3}>
-            <Box sx={{ textAlign: 'center', color: 'white' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700 }}>14+</Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Volumes Published</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Box sx={{ textAlign: 'center', color: 'white' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700 }}>250+</Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Published Articles</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Box sx={{ textAlign: 'center', color: 'white' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700 }}>97%</Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Peer Review Rate</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Box sx={{ textAlign: 'center', color: 'white' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700 }}>45</Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Countries Reached</Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-    </Box>
-  );
-};
+// // New Stats Bar Component
+// const StatsBar = () => {
+//   return (
+//     <Box
+//       sx={{
+//         mb: 6,
+//         ...slideUp,
+//         animationDelay: '500ms'
+//       }}
+//     >
+//       <Paper
+//         elevation={3}
+//         sx={{
+//           borderRadius: 3,
+//           py: 2,
+//           px: 4,
+//           background: 'linear-gradient(90deg, #1E3A8A 0%, #304B9C 100%)',
+//           position: 'relative',
+//           overflow: 'hidden'
+//         }}
+//       >
+//         <Box
+//           component="img"
+//           src="https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+//           alt="Stats Background"
+//           sx={{
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             width: '100%',
+//             height: '100%',
+//             objectFit: 'cover',
+//             opacity: 0.1
+//           }}
+//         />
+//         <Grid container spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+//           <Grid item xs={6} sm={3}>
+//             <Box sx={{ textAlign: 'center', color: 'white' }}>
+//               <Typography variant="h4" sx={{ fontWeight: 700 }}>1+</Typography>
+//               <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Volumes Published</Typography>
+//             </Box>
+//           </Grid>
+//           <Grid item xs={6} sm={3}>
+//             <Box sx={{ textAlign: 'center', color: 'white' }}>
+//               <Typography variant="h4" sx={{ fontWeight: 700 }}>250+</Typography>
+//               <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Published Articles</Typography>
+//             </Box>
+//           </Grid>
+//           <Grid item xs={6} sm={3}>
+//             <Box sx={{ textAlign: 'center', color: 'white' }}>
+//               <Typography variant="h4" sx={{ fontWeight: 700 }}>97%</Typography>
+//               <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Peer Review Rate</Typography>
+//             </Box>
+//           </Grid>
+//           <Grid item xs={6} sm={3}>
+//             <Box sx={{ textAlign: 'center', color: 'white' }}>
+//               <Typography variant="h4" sx={{ fontWeight: 700 }}>45</Typography>
+//               <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Countries Reached</Typography>
+//             </Box>
+//           </Grid>
+//         </Grid>
+//       </Paper>
+//     </Box>
+//   );
+// };
 
 const MainContent = () => {
   const navigate = useNavigate();
@@ -577,7 +577,7 @@ const MainContent = () => {
         </Grid>
       </Box>
       
-      {/* New Latest Articles Section */}
+      {/* New Upcoming Articles Section */}
       <Box 
         sx={{ 
           mt: 5, 
@@ -606,7 +606,7 @@ const MainContent = () => {
             }
           }}
         >
-          Latest Articles
+          Upcoming Articles
         </Typography>
         
         <Grid container spacing={3} sx={{ mt: 2 }}>
@@ -623,124 +623,16 @@ const MainContent = () => {
                   boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
                 }
               }}
-            >
-              <CardMedia
-                component="img"
-                sx={{ 
-                  width: { sm: 180 },
-                  height: { xs: 180, sm: '100%' }
-                }}
-                image="https://images.unsplash.com/photo-1545259741-2ea3ebf61fa3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-                alt="Smart Building Systems"
-              />
-              <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
-                <Typography component="div" variant="h6" fontWeight={600}>
-                  Smart Building Systems: A Review
+            > 
+              <CardContent>
+                <Typography variant="h6" component="h3" gutterBottom color="textSecondary">
+                  Upcoming Article 1
                 </Typography>
-                <Typography variant="subtitle2" color="text.secondary" component="div" sx={{ mb: 1 }}>
-                  By Dr. Sarah Johnson, Dr. Michael Lee
+                <Typography variant="body1">
+                  This is the first upcoming article. It will be published in the upcoming issue.
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-                  This comprehensive review explores recent advancements in smart building technologies and their implications for construction management.
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                  <Typography variant="caption" color="primary">
-                    Vol. 14, Issue 2, June 2024
-                  </Typography>
-                  <Button 
-                    size="small" 
-                    variant="outlined" 
-                    color="primary"
-                    component={Link}
-                    to="/articles/smart-building-systems"
-                  >
-                    Read More
-                  </Button>
-                </Box>
               </CardContent>
             </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <Card 
-              sx={{ 
-                display: 'flex', 
-                flexDirection: { xs: 'column', sm: 'row' },
-                overflow: 'hidden',
-                height: '100%',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-                }
-              }}
-            >
-              <CardMedia
-                component="img"
-                sx={{ 
-                  width: { sm: 180 },
-                  height: { xs: 180, sm: '100%' }
-                }}
-                image="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-                alt="Sustainable Construction Materials"
-              />
-              <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
-                <Typography component="div" variant="h6" fontWeight={600}>
-                  Sustainable Construction Materials: Environmental Impact Assessment
-                </Typography>
-                <Typography variant="subtitle2" color="text.secondary" component="div" sx={{ mb: 1 }}>
-                  By Prof. Robert Williams, Dr. James Chen
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-                  This study evaluates the environmental impact of sustainable construction materials in high-rise buildings across different climate zones.
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                  <Typography variant="caption" color="primary">
-                    Vol. 14, Issue 2, June 2024
-                  </Typography>
-                  <Button 
-                    size="small" 
-                    variant="outlined" 
-                    color="primary"
-                    component={Link}
-                    to="/articles/sustainable-materials"
-                  >
-                    Read More
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12}>
-            <Box 
-              sx={{ 
-                mt: 2, 
-                display: 'flex', 
-                justifyContent: 'center' 
-              }}
-            >
-              {/* <Button 
-                variant="contained" 
-                color="primary"
-                component={Link}
-                to="/articles"
-                sx={{ 
-                  px: 4, 
-                  py: 1,
-                  borderRadius: 2,
-                  fontWeight: 500,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 6px 16px rgba(0,0,0,0.15)'
-                  }
-                }}
-              >
-                Browse All Articles
-              </Button> */}
-            </Box>
           </Grid>
         </Grid>
       </Box>
@@ -952,7 +844,7 @@ const Sidebar = () => {
           }}></Box>
           
           <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: '#1a1a1a' }}>
-            Volume 14, Issue 3 (October 2024)
+            Volume 1, Issue 1 (June 2025)
           </Typography>
           
           <Typography variant="body2" sx={{ mb: 2, color: '#555' }}>
@@ -969,7 +861,7 @@ const Sidebar = () => {
             mb: 2
           }}>
             <Typography variant="body2" sx={{ fontWeight: 500 }}>Submission Deadline:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 600, color: '#d32f2f' }}>August 15, 2024</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#d32f2f' }}>June 5, 2025</Typography>
           </Box>
           
           <Button 
@@ -1045,7 +937,8 @@ const Sidebar = () => {
                 textAlign: 'center'
               }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, color: '#3f51b5', mb: 1 }}>
-                  2.7
+                -
+
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Impact Factor
@@ -1065,7 +958,7 @@ const Sidebar = () => {
                 textAlign: 'center'
               }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, color: '#f50057', mb: 1 }}>
-                  45
+                  5
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Days to First Decision
@@ -1085,7 +978,7 @@ const Sidebar = () => {
                 textAlign: 'center'
               }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, color: '#4caf50', mb: 1 }}>
-                  142
+                  -
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Citations in 2023
@@ -1105,7 +998,7 @@ const Sidebar = () => {
                 textAlign: 'center'
               }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, color: '#ff9800', mb: 1 }}>
-                  9.2k
+                    -
                 </Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
                   Monthly Views
@@ -1193,7 +1086,6 @@ const App = () => {
     <Box sx={{ ...fadeIn }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
         <HeroSection />
-        <StatsBar />
         <Grid container spacing={4}>
           <Grid item xs={12} md={8}>
             <MainContent />
