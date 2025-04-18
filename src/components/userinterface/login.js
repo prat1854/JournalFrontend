@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, CssBaseline, Avatar, Typography, TextField, Button, FormControlLabel, Checkbox, Link, Grid, Box, Paper, InputAdornment, IconButton } from '@mui/material';
+import { Container, CssBaseline, Avatar, Typography, TextField, Button, FormControlLabel, Checkbox, Link, Grid, Box, Paper, InputAdornment, IconButton, Divider } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import EmailIcon from '@mui/icons-material/Email';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -174,8 +174,8 @@ export default function SignInPage() {
             >
               Sign In
             </Button>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Grid container>
+              <Grid item xs={12}>
                 <Link 
                   component="button" 
                   variant="body2" 
@@ -184,16 +184,32 @@ export default function SignInPage() {
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
-                <Link 
-                  component="button" 
-                  variant="body2" 
-                  onClick={() => navigate('/signup')}
-                >
-                  New user? Sign up
-                </Link>
-              </Grid>
             </Grid>
+            
+            <Divider sx={{ my: 3 }}>
+              <Typography variant="body2" color="text.secondary">
+                OR
+              </Typography>
+            </Divider>
+            
+            <Box sx={{ textAlign: 'center', mb: 1 }}>
+              <Typography variant="body1" color="text.secondary" gutterBottom>
+                Not a member?
+              </Typography>
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{
+                  py: 1.5,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                }}
+                onClick={() => navigate('/signup')}
+              >
+                Join Now
+              </Button>
+            </Box>
           </Box>
         </Paper>
       </Container>

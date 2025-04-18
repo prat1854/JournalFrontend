@@ -10,7 +10,7 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 const Footer = () => (
-  <footer className="main-footer">
+  <footer className="main-footer animate-slide">
     <div className="footer-content">
       <div className="footer-info">
         <h3>Global Journal of Construction Management and Engineering</h3>
@@ -19,7 +19,7 @@ const Footer = () => (
       <div className="footer-contact">
         <h3>Contact Us</h3>
         <p><a href="mailto:info@lordtechdatus.com">Email: info@lordtechdatus.com</a></p>
-        <p style={{fontSize:18 , fontWeight:500}} >Phone: +91 99817 56433</p>
+        <p className="animate-slide" style={{fontSize:18, fontWeight:500, animationDelay: '300ms'}}>Phone: +91 99817 56433</p>
         <p>Address: G1, Akansha Apartment, Patel Nagar, City Centre, Gwalior, Near Raj Rajeshwari Apartment , 474002</p>
       </div>
     </div>
@@ -38,13 +38,14 @@ const ResearchEthicsGuidelines = () => {
     <>
       <Container maxWidth="lg" sx={{ pt: 2, pb: 8 }}>
         <Box className="content-wrapper" sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
-          <Box className="main-content" sx={{ flex: '1 1 70%' }}>
+          <Box className="main-content animate-slide" sx={{ flex: '1 1 70%' }}>
             <Paper elevation={1} sx={{ p: 4, borderRadius: 2, mb: 4 }}>
-              <Typography variant="h3" component="h1" sx={{ 
+              <Typography variant="h3" component="h1" className="animate-slide" sx={{ 
                 mb: 3, 
                 color: '#d32f2f',
                 fontWeight: 700,
                 position: 'relative',
+                animationDelay: '100ms',
                 '&:after': {
                   content: '""',
                   position: 'absolute',
@@ -59,12 +60,12 @@ const ResearchEthicsGuidelines = () => {
               </Typography>
 
               <Box sx={{ mt: 5 }}>
-                <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.7 }}>
+                <Typography variant="body1" className="animate-slide" sx={{ mb: 3, lineHeight: 1.7, animationDelay: '200ms' }}>
                   The Global Journal of Construction Management and Engineering is committed to maintaining the highest standards of research integrity. 
                   All authors submitting work to GJCME must adhere to the following ethical guidelines:
                 </Typography>
 
-                <Box sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2, mb: 4 }}>
+                <Box className="animate-slide" sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2, mb: 4, animationDelay: '300ms' }}>
                   <Typography variant="h6" sx={{ mb: 2, color: '#d32f2f', display: 'flex', alignItems: 'center' }}>
                     <VerifiedUserIcon sx={{ mr: 1 }} /> Author Responsibilities
                   </Typography>
@@ -79,7 +80,7 @@ const ResearchEthicsGuidelines = () => {
                       'Consent proof has been obtained for any mentioned people or groups.',
                       'Authorship has been agreed upon before submission, ensuring no one has been granted or denied authorship inappropriately (no \'gifted\' or \'ghost\' authorship).'
                     ].map((item, index) => (
-                      <ListItem key={index} sx={{ py: 0.5 }}>
+                      <ListItem key={index} className="animate-slide" sx={{ py: 0.5, animationDelay: `${350 + index * 50}ms` }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
                           <CheckCircleOutlineIcon color="primary" />
                         </ListItemIcon>
@@ -89,7 +90,7 @@ const ResearchEthicsGuidelines = () => {
                   </List>
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box className="animate-slide" sx={{ mb: 4, animationDelay: '700ms' }}>
                   <Typography variant="h6" sx={{ mb: 2, color: '#d32f2f', display: 'flex', alignItems: 'center' }}>
                     <LibraryBooksIcon sx={{ mr: 1 }} /> Attribution
                   </Typography>
@@ -98,7 +99,7 @@ const ResearchEthicsGuidelines = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2, mb: 4 }}>
+                <Box className="animate-slide" sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2, mb: 4, animationDelay: '800ms' }}>
                   <Typography variant="h6" sx={{ mb: 2, color: '#d32f2f', display: 'flex', alignItems: 'center' }}>
                     <PeopleAltIcon sx={{ mr: 1 }} /> Authorship
                   </Typography>
@@ -107,7 +108,7 @@ const ResearchEthicsGuidelines = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ mb: 4 }}>
+                <Box className="animate-slide" sx={{ mb: 4, animationDelay: '900ms' }}>
                   <Typography variant="h6" sx={{ mb: 2, color: '#d32f2f', display: 'flex', alignItems: 'center' }}>
                     <WarningAmberIcon sx={{ mr: 1 }} /> Conflicts of Interest
                   </Typography>
@@ -124,7 +125,7 @@ const ResearchEthicsGuidelines = () => {
                       'A financial or personal interest in suppressing the research.',
                       'A pending patent.'
                     ].map((item, index) => (
-                      <ListItem key={index} sx={{ py: 0.5 }}>
+                      <ListItem key={index} className="animate-slide" sx={{ py: 0.5, animationDelay: `${950 + index * 50}ms` }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
                           <CheckCircleOutlineIcon color="primary" />
                         </ListItemIcon>
@@ -138,7 +139,7 @@ const ResearchEthicsGuidelines = () => {
                   </Typography>
                 </Box>
 
-                <Box sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2 }}>
+                <Box className="animate-slide" sx={{ bgcolor: '#f8f9fa', p: 3, borderRadius: 2, animationDelay: '1200ms' }}>
                   <Typography variant="h6" sx={{ mb: 2, color: '#d32f2f', display: 'flex', alignItems: 'center' }}>
                     <ReportProblemIcon sx={{ mr: 1 }} /> Plagiarism
                   </Typography>
@@ -153,7 +154,7 @@ const ResearchEthicsGuidelines = () => {
                       'Paraphrasing: Altering or rearranging content without proper attribution. Serious paraphrasing without credit is considered as grave as direct copying.',
                       'Reusing content without attribution: Using figures, tables, or text from another source without proper permission or credit.'
                     ].map((item, index) => (
-                      <ListItem key={index} sx={{ py: 0.5 }}>
+                      <ListItem key={index} className="animate-slide" sx={{ py: 0.5, animationDelay: `${1250 + index * 50}ms` }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
                           <CheckCircleOutlineIcon color="error" />
                         </ListItemIcon>
@@ -162,11 +163,11 @@ const ResearchEthicsGuidelines = () => {
                     ))}
                   </List>
                   
-                  <Typography variant="body1" sx={{ mt: 3, lineHeight: 1.7 }}>
+                  <Typography variant="body1" className="animate-slide" sx={{ mt: 3, lineHeight: 1.7, animationDelay: '1400ms' }}>
                     Allegations of plagiarism can significantly impact a researcher's career. When approached by a third party with such an allegation, a response is always sought from the original author(s) or copyright holder(s) before any action is taken. GJCME remains impartial and is not influenced by external parties. All allegations are handled according to the COPE (Committee on Publication Ethics) guidelines.
                   </Typography>
                   
-                  <Typography variant="body1" sx={{ mt: 3, lineHeight: 1.7 }}>
+                  <Typography variant="body1" className="animate-slide" sx={{ mt: 3, lineHeight: 1.7, animationDelay: '1450ms' }}>
                     GJCME is not obligated to discuss individual cases of alleged plagiarism with third parties and reserves the right not to proceed if the complainant provides a false name or affiliation, or behaves inappropriately or threateningly towards GJCME editors.
                   </Typography>
                 </Box>
@@ -174,7 +175,7 @@ const ResearchEthicsGuidelines = () => {
             </Paper>
           </Box>
           
-          <Box className="sidebar" sx={{ flex: '1 1 30%' }}>
+          <Box className="sidebar animate-slide" sx={{ flex: '1 1 30%', animationDelay: '300ms' }}>
             <Paper elevation={1} sx={{ p: 3, borderRadius: 2, mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, position: 'relative' }}>
                 Journal Information
@@ -189,38 +190,42 @@ const ResearchEthicsGuidelines = () => {
               </Box>
             </Paper>
             
-            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+            <Paper elevation={1} className="animate-slide" sx={{ p: 3, borderRadius: 2, animationDelay: '400ms' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, position: 'relative' }}>
                 Author Resources
                 <Divider sx={{ mt: 1, mb: 2, height: 3, backgroundColor: '#d32f2f', width: '40px' }} />
               </Typography>
               <List sx={{ p: 0 }}>
-                <ListItem component={Link} to="/AuthorGuidelines" sx={{ 
+                <ListItem component={Link} to="/AuthorGuidelines" className="animate-slide" sx={{ 
                   color: '#333', 
                   textDecoration: 'none',
+                  animationDelay: '450ms',
                   '&:hover': { color: '#d32f2f', bgcolor: 'rgba(0,0,0,0.03)' }
                 }}>
                   <ListItemText primary="Author Guidelines" />
                 </ListItem>
-                <ListItem component={Link} to="/SubmissionTemplate" sx={{ 
+                <ListItem component={Link} to="/SubmissionTemplate" className="animate-slide" sx={{ 
                   color: '#333', 
                   textDecoration: 'none',
+                  animationDelay: '500ms',
                   '&:hover': { color: '#d32f2f', bgcolor: 'rgba(0,0,0,0.03)' }
                 }}>
                   <ListItemText primary="Submission Guidelines" />
                 </ListItem>
-                <ListItem component={Link} to="/ResearchEthicsGuidelines" sx={{ 
+                <ListItem component={Link} to="/ResearchEthicsGuidelines" className="animate-slide" sx={{ 
                   color: '#d32f2f', 
                   textDecoration: 'none',
+                  animationDelay: '550ms',
                   bgcolor: 'rgba(211,47,47,0.05)',
                   borderLeft: '3px solid #d32f2f',
                   pl: 2
                 }}>
                   <ListItemText primary="Research Ethics Guidelines" />
                 </ListItem>
-                  <ListItem component="a" href="/copyright.pdf" target="_blank" sx={{ 
+                  <ListItem component="a" href="/copyright.pdf" target="_blank" className="animate-slide" sx={{ 
                   color: '#333', 
                   textDecoration: 'none',
+                  animationDelay: '600ms',
                   '&:hover': { color: '#d32f2f', bgcolor: 'rgba(0,0,0,0.03)' }
                 }}>
                   <ListItemText primary="Copyright Form" />

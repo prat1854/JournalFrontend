@@ -22,7 +22,8 @@ import {
   Fade,
   Paper,
   Divider,
-  useMediaQuery
+  useMediaQuery,
+  CardMedia
 } from '@mui/material';
 import { 
   Search as SearchIcon, 
@@ -32,7 +33,8 @@ import {
   Copyright,
   Menu as MenuIcon, 
   AccountCircle,
-  VerifiedUser
+  VerifiedUser,
+  ArrowForward
 } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import { isLoggedIn } from '../../utils/authUtils';
@@ -192,6 +194,166 @@ const NavButton = styled(Button)(({ theme, active }) => ({
 }));
 // ======== END: STYLED HEADER COMPONENT ========
 
+// Hero section with background image
+const HeroSection = () => {
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        height: '500px',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        borderRadius: 4,
+        mb: 6,
+        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+        ...fadeIn
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7))',
+          zIndex: 1
+        }}
+      />
+      <Box
+        component="img"
+        src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+        alt="Construction Management"
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          transform: 'scale(1.1)',
+          animation: 'zoomSlow 30s infinite alternate ease-in-out',
+          '@keyframes zoomSlow': {
+            '0%': { transform: 'scale(1.0)' },
+            '100%': { transform: 'scale(1.2)' }
+          }
+        }}
+      />
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+        <Box sx={{ maxWidth: 650 }}>
+          <Typography 
+            variant="h2" 
+            component="h1" 
+            sx={{ 
+              color: 'white', 
+              fontWeight: 700, 
+              mb: 2,
+              ...slideDown
+            }}
+          >
+            Global Journal of Construction Management and Engineering
+          </Typography>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              color: 'rgba(255,255,255,0.85)', 
+              mb: 4,
+              ...slideRight,
+              animationDelay: '200ms'
+            }}
+          >
+            Advancing knowledge and innovation in construction management and engineering
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            size="large" 
+            component={Link} 
+            to="/submissions"
+            endIcon={<ArrowForward />}
+            sx={{ 
+              py: 1.5, 
+              px: 4, 
+              fontWeight: 600,
+              ...slideUp,
+              animationDelay: '400ms'
+            }}
+          >
+            Submit Your Research
+          </Button>
+        </Box>
+      </Container>
+    </Box>
+  );
+};
+
+// New Stats Bar Component
+const StatsBar = () => {
+  return (
+    <Box
+      sx={{
+        mb: 6,
+        ...slideUp,
+        animationDelay: '500ms'
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          borderRadius: 3,
+          py: 2,
+          px: 4,
+          background: 'linear-gradient(90deg, #1E3A8A 0%, #304B9C 100%)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <Box
+          component="img"
+          src="https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+          alt="Stats Background"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.1
+          }}
+        />
+        <Grid container spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ textAlign: 'center', color: 'white' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700 }}>14+</Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Volumes Published</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ textAlign: 'center', color: 'white' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700 }}>250+</Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Published Articles</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ textAlign: 'center', color: 'white' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700 }}>97%</Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Peer Review Rate</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ textAlign: 'center', color: 'white' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700 }}>45</Typography>
+              <Typography variant="body2" sx={{ opacity: 0.9, fontSize: '0.9rem' }}>Countries Reached</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Box>
+  );
+};
+
 const MainContent = () => {
   const navigate = useNavigate();
   
@@ -244,9 +406,19 @@ const MainContent = () => {
               height: '100%', 
               borderTop: '4px solid #3f51b5',
               ...slideRight,
-              animationDelay: '500ms'
+              animationDelay: '500ms',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-5px)'
+              }
             }}
           >
+            <CardMedia
+              component="img"
+              height="160"
+              image="https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Construction Management"
+            />
             <CardContent>
               <Typography variant="h5" component="h3" gutterBottom color="primary" sx={{ fontWeight: 600 }}>
                 Management Studies
@@ -276,9 +448,19 @@ const MainContent = () => {
               height: '100%', 
               borderTop: '4px solid #f50057',
               ...slideRight,
-              animationDelay: '700ms'
+              animationDelay: '700ms',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-5px)'
+              }
             }}
           >
+            <CardMedia
+              component="img"
+              height="160"
+              image="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Engineering Studies"
+            />
             <CardContent>
               <Typography variant="h5" component="h3" gutterBottom color="primary" sx={{ fontWeight: 600 }}>
                 Engineering Studies
@@ -308,9 +490,19 @@ const MainContent = () => {
               height: '100%', 
               borderTop: '4px solid #4caf50',
               ...slideRight,
-              animationDelay: '900ms'
+              animationDelay: '900ms',
+              transition: 'transform 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-5px)'
+              }
             }}
           >
+            <CardMedia
+              component="img"
+              height="160"
+              image="https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Interdisciplinary Research"
+            />
             <CardContent>
               <Typography variant="h5" component="h3" gutterBottom color="primary" sx={{ fontWeight: 600 }}>
                 Interdisciplinary Research
@@ -334,12 +526,28 @@ const MainContent = () => {
         </Grid>
       </Grid>
 
-      <Box sx={{ mt: 5, p: 3, bgcolor: '#f8f9fa', borderRadius: 2 }}>
-        <Typography variant="h4" component="h2" gutterBottom color="primary" sx={{ fontWeight: 600 }}>
+      <Box sx={{ mt: 5, p: 4, bgcolor: '#f8f9fa', borderRadius: 2, position: 'relative', overflow: 'hidden' }}>
+        <Box
+          component="img"
+          src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80"
+          alt="Publication Background"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '40%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.15,
+            borderTopLeftRadius: '50%',
+            borderBottomLeftRadius: '50%'
+          }}
+        />
+        <Typography variant="h4" component="h2" gutterBottom color="primary" sx={{ fontWeight: 600, position: 'relative', zIndex: 1 }}>
           Publication Information
         </Typography>
         
-        <Grid container spacing={3} sx={{ mt: 1 }}>
+        <Grid container spacing={3} sx={{ mt: 1, position: 'relative', zIndex: 1 }}>
           <Grid item xs={12} md={4}>
             <Typography variant="h6" component="h3" gutterBottom color="textSecondary">
               Publication Frequency
@@ -368,6 +576,174 @@ const MainContent = () => {
           </Grid>
         </Grid>
       </Box>
+      
+      {/* New Latest Articles Section */}
+      <Box 
+        sx={{ 
+          mt: 5, 
+          ...slideUp, 
+          animationDelay: '500ms',
+          position: 'relative',
+          overflow: 'hidden' 
+        }}
+      >
+        <Typography 
+          variant="h4" 
+          component="h2" 
+          gutterBottom 
+          color="primary" 
+          sx={{ 
+            fontWeight: 600,
+            position: 'relative',
+            '&:after': {
+              content: '""',
+              position: 'absolute',
+              left: 0,
+              bottom: -5,
+              height: 4,
+              width: 100,
+              backgroundColor: '#FFD700',
+            }
+          }}
+        >
+          Latest Articles
+        </Typography>
+        
+        <Grid container spacing={3} sx={{ mt: 2 }}>
+          <Grid item xs={12} md={6}>
+            <Card 
+              sx={{ 
+                display: 'flex', 
+                flexDirection: { xs: 'column', sm: 'row' },
+                overflow: 'hidden',
+                height: '100%',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                }
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{ 
+                  width: { sm: 180 },
+                  height: { xs: 180, sm: '100%' }
+                }}
+                image="https://images.unsplash.com/photo-1545259741-2ea3ebf61fa3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                alt="Smart Building Systems"
+              />
+              <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
+                <Typography component="div" variant="h6" fontWeight={600}>
+                  Smart Building Systems: A Review
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary" component="div" sx={{ mb: 1 }}>
+                  By Dr. Sarah Johnson, Dr. Michael Lee
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
+                  This comprehensive review explores recent advancements in smart building technologies and their implications for construction management.
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                  <Typography variant="caption" color="primary">
+                    Vol. 14, Issue 2, June 2024
+                  </Typography>
+                  <Button 
+                    size="small" 
+                    variant="outlined" 
+                    color="primary"
+                    component={Link}
+                    to="/articles/smart-building-systems"
+                  >
+                    Read More
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          
+          <Grid item xs={12} md={6}>
+            <Card 
+              sx={{ 
+                display: 'flex', 
+                flexDirection: { xs: 'column', sm: 'row' },
+                overflow: 'hidden',
+                height: '100%',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                }
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{ 
+                  width: { sm: 180 },
+                  height: { xs: 180, sm: '100%' }
+                }}
+                image="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                alt="Sustainable Construction Materials"
+              />
+              <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
+                <Typography component="div" variant="h6" fontWeight={600}>
+                  Sustainable Construction Materials: Environmental Impact Assessment
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary" component="div" sx={{ mb: 1 }}>
+                  By Prof. Robert Williams, Dr. James Chen
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
+                  This study evaluates the environmental impact of sustainable construction materials in high-rise buildings across different climate zones.
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                  <Typography variant="caption" color="primary">
+                    Vol. 14, Issue 2, June 2024
+                  </Typography>
+                  <Button 
+                    size="small" 
+                    variant="outlined" 
+                    color="primary"
+                    component={Link}
+                    to="/articles/sustainable-materials"
+                  >
+                    Read More
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          
+          <Grid item xs={12}>
+            <Box 
+              sx={{ 
+                mt: 2, 
+                display: 'flex', 
+                justifyContent: 'center' 
+              }}
+            >
+              {/* <Button 
+                variant="contained" 
+                color="primary"
+                component={Link}
+                to="/articles"
+                sx={{ 
+                  px: 4, 
+                  py: 1,
+                  borderRadius: 2,
+                  fontWeight: 500,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 6px 16px rgba(0,0,0,0.15)'
+                  }
+                }}
+              >
+                Browse All Articles
+              </Button> */}
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
@@ -375,8 +751,27 @@ const MainContent = () => {
 const Sidebar = () => {
   return (
     <Box sx={{ ...slideLeft, animationDelay: '400ms' }}>
-      <Card elevation={3} sx={{ mb: 4, overflow: 'visible', borderRadius: 2 }}>
-        <CardContent>
+      <Card elevation={3} sx={{ 
+        mb: 4, 
+        overflow: 'visible', 
+        borderRadius: 2,
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1507608158173-1dcec673a2e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.05,
+          borderRadius: 2,
+          zIndex: 0
+        }
+      }}>
+        <CardContent sx={{ position: 'relative', zIndex: 1 }}>
           <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, color: '#1E3A8A' }}>
             Journal Information
           </Typography>
@@ -429,7 +824,12 @@ const Sidebar = () => {
         </CardContent>
       </Card>
       
-      <Card elevation={3} sx={{ borderRadius: 2 }}>
+      <Card elevation={3} sx={{ 
+        borderRadius: 2,
+        backgroundImage: 'linear-gradient(to right bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.98)), url(https://images.unsplash.com/photo-1512758017271-d7b84c2113f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <CardContent>
           <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, color: '#1E3A8A' }}>
             Author Resources
@@ -519,6 +919,202 @@ const Sidebar = () => {
           </List>
         </CardContent>
       </Card>
+      
+      {/* New Upcoming Issues Card */}
+      <Card elevation={3} sx={{ 
+        mt: 4,
+        borderRadius: 2,
+        overflow: 'hidden',
+        ...slideLeft,
+        animationDelay: '600ms'
+      }}>
+        <CardMedia
+          component="img"
+          height="140"
+          image="https://images.unsplash.com/photo-1586280268958-9483002d016a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+          alt="Upcoming Issue"
+          sx={{
+            filter: 'brightness(0.85)'
+          }}
+        />
+        <CardContent>
+          <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, color: '#1E3A8A' }}>
+            Upcoming Issue
+          </Typography>
+          
+          <Box sx={{ 
+            height: 4, 
+            width: 120, 
+            bgcolor: '#FFD700', 
+            mb: 3, 
+            borderRadius: 1,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}></Box>
+          
+          <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+            Volume 14, Issue 3 (October 2024)
+          </Typography>
+          
+          <Typography variant="body2" sx={{ mb: 2, color: '#555' }}>
+            Our upcoming issue features research on sustainable construction, smart building technologies, and innovative project management methodologies.
+          </Typography>
+          
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            bgcolor: 'rgba(30, 58, 138, 0.05)',
+            p: 1.5,
+            borderRadius: 1,
+            mb: 2
+          }}>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>Submission Deadline:</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#d32f2f' }}>August 15, 2024</Typography>
+          </Box>
+          
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            fullWidth
+            component={Link}
+            to="/submission-guidelines"
+            sx={{ 
+              mt: 1, 
+              borderRadius: 2,
+              py: 1,
+              fontWeight: 500,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                transform: 'translateY(-3px)',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+              }
+            }}
+          >
+            View Submission Guidelines
+          </Button>
+        </CardContent>
+      </Card>
+      
+      {/* New Journal Metrics Card */}
+      <Card elevation={3} sx={{ 
+        mt: 4,
+        borderRadius: 2,
+        overflow: 'hidden',
+        ...slideLeft,
+        animationDelay: '800ms'
+      }}>
+        <Box sx={{ position: 'relative' }}>
+          <CardMedia
+            component="img"
+            height="120"
+            image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            alt="Journal Metrics"
+            sx={{
+              filter: 'brightness(0.7)'
+            }}
+          />
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              color: 'white',
+              p: 2,
+              fontWeight: 600,
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.7))'
+            }}
+          >
+            Journal Metrics
+          </Typography>
+        </Box>
+        <CardContent>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={6}>
+              <Box sx={{ 
+                p: 2, 
+                bgcolor: 'rgba(63, 81, 181, 0.08)', 
+                borderRadius: 2,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center'
+              }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: '#3f51b5', mb: 1 }}>
+                  2.7
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  Impact Factor
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box sx={{ 
+                p: 2, 
+                bgcolor: 'rgba(245, 0, 87, 0.08)', 
+                borderRadius: 2,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center'
+              }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: '#f50057', mb: 1 }}>
+                  45
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  Days to First Decision
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box sx={{ 
+                p: 2, 
+                bgcolor: 'rgba(76, 175, 80, 0.08)', 
+                borderRadius: 2,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center'
+              }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: '#4caf50', mb: 1 }}>
+                  142
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  Citations in 2023
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box sx={{ 
+                p: 2, 
+                bgcolor: 'rgba(255, 152, 0, 0.08)', 
+                borderRadius: 2,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center'
+              }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: '#ff9800', mb: 1 }}>
+                  9.2k
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  Monthly Views
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     </Box>
   );
 };
@@ -533,11 +1129,27 @@ const Footer = () => {
         mt: 6, 
         py: 4,
         boxShadow: '0 -4px 10px rgba(0,0,0,0.05)',
+        position: 'relative',
+        overflow: 'hidden',
         ...fadeIn,
         animationDelay: '600ms'
       }}
     >
-      <Container maxWidth="lg">
+      <Box
+        component="img"
+        src="https://images.unsplash.com/photo-1536895058696-a69b1c7ba34f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+        alt="Footer Background"
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.08
+        }}
+      />
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
@@ -580,6 +1192,8 @@ const App = () => {
   return (
     <Box sx={{ ...fadeIn }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
+        <HeroSection />
+        <StatsBar />
         <Grid container spacing={4}>
           <Grid item xs={12} md={8}>
             <MainContent />

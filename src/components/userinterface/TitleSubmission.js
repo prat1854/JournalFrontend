@@ -5,8 +5,8 @@ import {
   Alert, CircularProgress, IconButton, Menu, MenuItem
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { useRequireAuth } from '../../utils/authUtils';
+import { useNavigate, Link } from 'react-router-dom';
+import { isLoggedIn, useRequireAuth } from '../../utils/authUtils';
 import axios from 'axios';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
@@ -28,6 +28,13 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
+const AuthCTA = styled(Box)(({ theme }) => ({
+  textAlign: 'center',
+  padding: theme.spacing(5),
+  marginTop: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+
 export default function TitleSubmission() {
   const [title, setTitle] = useState('');
   const [checklist, setChecklist] = useState({
@@ -44,13 +51,8 @@ export default function TitleSubmission() {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   
-  // Use our custom auth hook to require authentication with alert
-  const isAuthenticated = useRequireAuth(true, true);
-
-  // If not authenticated, the hook will redirect and we can show loading
-  if (!isAuthenticated) {
-    return <CircularProgress />;
-  }
+  // Check if user is logged in without redirection
+  const authenticated = isLoggedIn();
 
   const handleChecklistChange = (event) => {
     setChecklist({
@@ -116,6 +118,76 @@ export default function TitleSubmission() {
     }
   };
 
+  // Content for non-authenticated users
+  const NonAuthenticatedContent = () => (
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <StyledPaper>
+        <SectionTitle>Submissions</SectionTitle>
+        
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 500 }}>
+          Login or Register to make a submission.
+        </Typography>
+        
+        <Box my={4}>
+          <Typography variant="h6" gutterBottom>Author Guidelines</Typography>
+          <Typography paragraph>
+            Authors are invited to make a submission to this journal. All submissions will be assessed by an editor 
+            to determine whether they meet the aims and scope of this journal. Those considered to be a good fit will 
+            be sent for peer review before determining whether they will be accepted or rejected.
+          </Typography>
+          
+          <Typography paragraph>
+            Before making a submission, authors are responsible for obtaining permission to publish any material 
+            included with the submission, such as photos, documents and datasets. All authors identified on the 
+            submission must consent to be identified as an author. Where appropriate, research should be approved 
+            by an appropriate ethics committee in accordance with the legal requirements of the study's country.
+          </Typography>
+          
+          <Typography paragraph>
+            An editor may desk reject a submission if it does not meet minimum standards of quality. Before submitting, 
+            please ensure that the study design and research argument are structured and articulated properly. The title 
+            should be concise and the abstract should be able to stand on its own. This will increase the likelihood of 
+            reviewers agreeing to review the paper. When you're satisfied that your submission meets this standard, 
+            please follow the checklist below to prepare your submission.
+          </Typography>
+        </Box>
+        
+        <AuthCTA>
+          <Typography variant="h6" gutterBottom>
+            Ready to submit your manuscript?
+          </Typography>
+          <Box mt={2}>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              component={Link} 
+              to="/login"
+              size="large"
+              sx={{ mr: 2 }}
+            >
+              Login
+            </Button>
+            <Button 
+              variant="outlined" 
+              color="primary" 
+              component={Link} 
+              to="/signup"
+              size="large"
+            >
+              Register
+            </Button>
+          </Box>
+        </AuthCTA>
+      </StyledPaper>
+    </Container>
+  );
+
+  // Render different content based on authentication status
+  if (!authenticated) {
+    return <NonAuthenticatedContent />;
+  }
+
+  // Original submission form for authenticated users
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       <StyledPaper>
@@ -252,41 +324,38 @@ export default function TitleSubmission() {
           </Box>
           
           <Box mb={4}>
-            <Typography variant="h6" gutterBottom>Privacy Consent *</Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                    <Checkbox 
-                    checked={privacyConsent}
-                    onChange={(e) => setPrivacyConsent(e.target.checked)}
-                    name="privacyConsent"
-                  />
-                }
-                label="Yes, I agree to have my data collected and stored according to the privacy statement."
-              />
-              {errors.privacyConsent && (
-                <FormHelperText error>{errors.privacyConsent}</FormHelperText>
-              )}
-            </FormGroup>
+            <Typography variant="h6" gutterBottom>Privacy Statement *</Typography>
+            <Typography paragraph>
+              The names and email addresses entered in this journal site will be used exclusively for the stated purposes of this journal and will not be made available for any other purpose or to any other party.
+            </Typography>
+            
+            <FormControlLabel
+              control={
+                <Checkbox 
+                  checked={privacyConsent}
+                  onChange={(e) => setPrivacyConsent(e.target.checked)}
+                  name="privacyConsent"
+                />
+              }
+              label="I agree to the privacy statement."
+            />
+            
+            {errors.privacyConsent && (
+              <FormHelperText error>{errors.privacyConsent}</FormHelperText>
+            )}
           </Box>
           
-          <Box display="flex" justifyContent="center" mt={4}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Button variant="outlined" onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="primary" 
               disabled={loading}
-              sx={{ 
-                px: 4,
-                py: 1,
-                borderRadius: '40px',
-                textTransform: 'none',
-                fontSize: '1rem',
-                cursor: 'pointer'
-              }}
             >
-              {loading ? <CircularProgress size={24} /> : 'Begin Submission'}
+              {loading ? <CircularProgress size={24} /> : "Continue"}
             </Button>
           </Box>
         </form>

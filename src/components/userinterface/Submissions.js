@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRequireAuth } from '../../utils/authUtils';
 import ApiService from '../../Services/FetchNodeAdminServices';
+import './styles.css';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -21,12 +22,14 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   marginBottom: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
   boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+  animation: 'slideRight 0.5s ease-out both',
 }));
 
 const EmbeddedStyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: 0,
   boxShadow: 'none',
+  animation: 'slideRight 0.5s ease-out both',
 }));
 
 const SearchContainer = styled(Box)(({ theme }) => ({
@@ -38,6 +41,8 @@ const SearchContainer = styled(Box)(({ theme }) => ({
   height: 40,
   width: '100%',
   maxWidth: 300,
+  animation: 'slideRight 0.5s ease-out both',
+  animationDelay: '100ms',
 }));
 
 const StatusChip = styled(Chip)(({ status, theme }) => ({
@@ -47,6 +52,22 @@ const StatusChip = styled(Chip)(({ status, theme }) => ({
   backgroundColor: status === 'Incomplete' ? '#ffeee6' : '#e6f7ec',
   color: status === 'Incomplete' ? '#d32f2f' : '#2e7d32',
   border: `1px solid ${status === 'Incomplete' ? '#ffc8b7' : '#b7e1cd'}`,
+  animation: 'fadeIn 0.5s ease-out both',
+}));
+
+const AnimatedBox = styled(Box)(({ delay = 0 }) => ({
+  animation: 'slideRight 0.5s ease-out both',
+  animationDelay: `${delay}ms`,
+}));
+
+const AnimatedTypography = styled(Typography)(({ delay = 0 }) => ({
+  animation: 'slideRight 0.5s ease-out both',
+  animationDelay: `${delay}ms`,
+}));
+
+const AnimatedButton = styled(Button)(({ delay = 0 }) => ({
+  animation: 'slideRight 0.5s ease-out both',
+  animationDelay: `${delay}ms`,
 }));
 
 export default function Submissions({ isEmbedded = false }) {
@@ -162,12 +183,12 @@ export default function Submissions({ isEmbedded = false }) {
   return (
     <ContentWrapper>
       {!isEmbedded && (
-        <Typography variant="h4" component="h1" gutterBottom>
+        <AnimatedTypography variant="h4" component="h1" gutterBottom>
           Submissions
-        </Typography>
+        </AnimatedTypography>
       )}
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: isEmbedded ? 0 : 3 }}>
+      <AnimatedBox sx={{ borderBottom: 1, borderColor: 'divider', mt: isEmbedded ? 0 : 3 }} delay={100}>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -178,9 +199,9 @@ export default function Submissions({ isEmbedded = false }) {
           <Tab label={<Box sx={{ display: 'flex', alignItems: 'center' }}>My Queue <Chip size="small" label={submissionList.length} sx={{ ml: 1, height: 20, fontSize: '0.75rem' }} /></Box>} />
           <Tab label="Archived" />
         </Tabs>
-      </Box>
+      </AnimatedBox>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4, mb: 2 }}>
+      <AnimatedBox sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4, mb: 2 }} delay={200}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <SearchContainer>
             <InputBase
@@ -198,24 +219,25 @@ export default function Submissions({ isEmbedded = false }) {
           </IconButton>
         </Box>
 
-        <Box>
-          <Button
+        <Box className="animate-slide" style={{animationDelay: '300ms'}}>
+          <AnimatedButton
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
             component={Link}
             to="/titlesubmission"
             sx={{ textTransform: 'none' }}
+            delay={350}
           >
             New Submission
-          </Button>
+          </AnimatedButton>
           <Tooltip title="Help">
             <IconButton sx={{ ml: 1 }}>
               <HelpOutlineIcon />
             </IconButton>
           </Tooltip>
         </Box>
-      </Box>
+      </AnimatedBox>
 
       <PaperComponent>
         {loading ? (
@@ -226,9 +248,10 @@ export default function Submissions({ isEmbedded = false }) {
           <>
             {tabValue === 0 && (
               <Box>
-                {filteredSubmissions.length > 0 ? filteredSubmissions.map((submission) => (
-                  <Box 
+                {filteredSubmissions.length > 0 ? filteredSubmissions.map((submission, index) => (
+                  <AnimatedBox 
                     key={submission.id || submission._id}
+                    delay={400 + (index * 50)}
                     sx={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -255,6 +278,8 @@ export default function Submissions({ isEmbedded = false }) {
                           variant="outlined"
                           onClick={() => handleViewSubmission(submission.id || submission._id)}
                           sx={{ ml: 2, textTransform: 'none' }}
+                          className="animate-slide"
+                          style={{animationDelay: `${450 + (index * 50)}ms`}}
                         >
                           View
                         </Button>
@@ -270,7 +295,7 @@ export default function Submissions({ isEmbedded = false }) {
                     
                     {expanded[submission.id || submission._id] && (
                       <>
-                        <Box sx={{ mt: 2 }}>
+                        <Box sx={{ mt: 2 }} className="animate-slide" style={{animationDelay: `${500 + (index * 50)}ms`}}>
                           <Typography variant="body2">
                             <strong>Keywords:</strong> {submission.keywords ? submission.keywords.join(', ') : 'No keywords available'}
                           </Typography>
@@ -278,7 +303,7 @@ export default function Submissions({ isEmbedded = false }) {
                             Last activity recorded on {submission.updatedAt ? new Date(submission.updatedAt).toLocaleDateString() : new Date().toLocaleDateString()}.
                           </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'end', mt: 2 }} className="animate-slide" style={{animationDelay: `${550 + (index * 50)}ms`}}>
                           <Button 
                             color="secondary" 
                             variant="outlined"
@@ -290,23 +315,23 @@ export default function Submissions({ isEmbedded = false }) {
                         </Box>
                       </>
                     )}
-                  </Box>
+                  </AnimatedBox>
                 )) : (
-                  <Box sx={{ py: 4, textAlign: 'center' }}>
+                  <AnimatedBox sx={{ py: 4, textAlign: 'center' }} delay={400}>
                     <Typography variant="body1" color="text.secondary">
                       No submissions found in your queue.
                     </Typography>
-                  </Box>
+                  </AnimatedBox>
                 )}
               </Box>
             )}
 
             {tabValue === 1 && (
-              <Box sx={{ py: 4, textAlign: 'center' }}>
+              <AnimatedBox sx={{ py: 4, textAlign: 'center' }} delay={400}>
                 <Typography variant="body1" color="text.secondary">
                   No archived submissions found.
                 </Typography>
-              </Box>
+              </AnimatedBox>
             )}
           </>
         )}

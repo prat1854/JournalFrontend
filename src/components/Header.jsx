@@ -238,7 +238,7 @@ const Header = () => {
         { name: 'Author Guidelines', path: '/AuthorGuidelines' },
         { name: 'Submission Guidelines', path: '/SubmissionTemplate' },
         {name: 'Research Ethics Guidelines', path: '/ResearchEthicsGuidelines'},
-        {name: 'submissions', path: '/titlesubmission'},
+        {name: 'Submissions', path: '/titlesubmission'},
       ],
      },
 
