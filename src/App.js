@@ -5,7 +5,7 @@ import Login from '../src/components/userinterface/login';
 import ResetPassword from './components/userinterface/ResetPassword';
 import SignUp from './components/userinterface/SignUp';
 import Contact from './components/userinterface/contact';
-import Header from './components/Header';
+import Header from './components/userinterface/Header';
 import About from './components/userinterface/about';
 import MyProfile from './components/userinterface/MyProfile';
 import EditProfile from './components/userinterface/EditProfile';

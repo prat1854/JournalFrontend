@@ -1,71 +1,63 @@
-/* header.css */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
-/* Header Styling */
-.bg-blue-500 {
-    background-color: #3b82f6; /* Tailwind's blue-500 */
-    color: white;
-    padding: 5px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Add padding to body to compensate for fixed header */
+body {
+  padding-top: 80px; /* Adjust based on your header height */
+}
+
+/* Header specific styles */
+.header-container {
+  font-family: 'Inter', sans-serif;
+}
+
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  transition: all 0.2s ease;
+}
+
+.header-logo:hover {
+  transform: translateY(-1px);
+}
+
+/* Animation for the underline effect */
+@keyframes underlineAnimation {
+  from {
+    width: 0;
+    opacity: 0;
   }
-  
-  /* Navigation Bar */
-  .bg-blue-700 {
-    background-color: #1e40af; /* Tailwind's blue-700 */
-    padding: 4px 10px;
-    display: flex;
-    justify-content: space-between;
-    
-    align-items: center;
+  to {
+    width: 70%;
+    opacity: 1;
   }
-  
-  /* Dropdown Styling */
-  .relative {
-    position: relative;
-    
-  }
-  
-  .absolute {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    background: white;
-    color: black;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-  
-  .absolute a {
-    display: block;
-    padding: 8px 16px;
-    text-decoration: none;
-    color: black;
-  }
-  
-  .absolute a:hover {
-    background: #f3f4f6; /* Light gray hover effect */
-  }
-  
-  /* Navigation Links */
-  nav a {
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-    padding: 8px 12px;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Search Box */
-  input[type="text"] {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 150px;
-  }
-  
-  
+}
+
+.nav-active-indicator {
+  animation: underlineAnimation 0.3s ease forwards;
+}
+
+/* Custom scrollbar for the search input */
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* Smooth transition for menu items */
+.header-menu-item {
+  transition: background-color 0.2s ease;
+}
+
+/* Custom overlay for mobile menu */
+.mobile-menu-backdrop {
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Icon hover effects */
+.header-icon:hover {
+  color: #d32f2f;
+  transform: translateY(-1px);
+} 

@@ -99,7 +99,7 @@ const EditorialTeam = () => {
     <Container maxWidth="lg" sx={{ py: 6, ...fadeIn }}>
       <Box textAlign="center" mb={6}>
         <Typography 
-          variant="h3" 
+          variant="h3"  
           gutterBottom 
           fontWeight={700} 
           sx={{ 
@@ -157,7 +157,7 @@ const EditorialTeam = () => {
       <SectionWrapper>
         <SectionTitle variant="h5">Associate Editors</SectionTitle>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}>
             <MemberPaper elevation={3} delay={400}>
               <EditorAvatar 
                 src={getAvatarUrl("M K Trivedi")} 
@@ -185,7 +185,8 @@ const EditorialTeam = () => {
                 </Typography>
               </Box>
             </MemberPaper>
-          </Grid>
+          </Grid> */}
+          
           <Grid item xs={12} md={6}>
             <MemberPaper elevation={3} delay={500}>
               <EditorAvatar 
@@ -209,7 +210,7 @@ const EditorialTeam = () => {
       <SectionWrapper>
         <SectionTitle variant="h5">Editorial Board Members</SectionTitle>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <MemberPaper elevation={3} delay={700}>
               <EditorAvatar 
                 src={getAvatarUrl("Prachi Singh")} 
@@ -235,8 +236,8 @@ const EditorialTeam = () => {
                 MITS-DU, India
               </Typography>
             </MemberPaper>
-          </Grid>
-          <Grid item xs={12} md={4}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={4}>
             <MemberPaper elevation={3} delay={800}>
               <EditorAvatar 
                 src={getAvatarUrl("Abhilash Shukla")} 
@@ -262,7 +263,7 @@ const EditorialTeam = () => {
                 MITS-DU, India
               </Typography>
             </MemberPaper>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={4}>
             <MemberPaper elevation={3} delay={900}>
               <EditorAvatar 

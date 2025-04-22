@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  AppBar, 
+import { AppBar, 
   Toolbar, 
-  Typography, 
-  Button, 
+  Typography, Button, 
   Container, 
   Grid, 
   Card, 
@@ -241,13 +239,14 @@ const HeroSection = () => {
         }}
       />
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-        <Box sx={{ maxWidth: 650 }}>
+        <Box sx={{ maxWidth: 600 }}>
           <Typography 
             variant="h2" 
             component="h1" 
             sx={{ 
               color: 'white', 
               fontWeight: 700, 
+              fontSize: '3.1rem',
               mb: 2,
               ...slideDown
             }}
@@ -258,6 +257,7 @@ const HeroSection = () => {
             variant="h5" 
             sx={{ 
               color: 'rgba(255,255,255,0.85)', 
+              fontSize: '0.9rem',
               mb: 4,
               ...slideRight,
               animationDelay: '200ms'
