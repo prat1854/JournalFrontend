@@ -37,15 +37,33 @@ const LogoContainer = styled(Typography)(({ theme }) => ({
   fontSize: '1.7rem',
   color: '#1a1a1a',
   position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'none',
+  },
   '&::after': {
     content: '""',
     position: 'absolute',
     bottom: '-4px',
-    left: '0',
-    width: '30px',
-    height: '2px',
+    left: '65px',
+    width: '185px',
+    height: '3px',
     backgroundColor: '#d32f2f',
   }
+}));
+
+const LogoImage = styled('img')(({ theme }) => ({
+  height: '45px',
+  marginRight: '15px',
+  transform: 'rotate(0deg)',
+  display: 'inline-block',
+  verticalAlign: 'middle',
+  [theme.breakpoints.down('sm')]: {
+    height: '38px',
+    marginRight: '12px',
+  },
 }));
 
 const Search = styled('div')(({ theme }) => ({
@@ -272,10 +290,10 @@ const Header = () => {
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between', py: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <LogoContainer variant="h6" component={Link} to="/" sx={{ textDecoration: 'none' }} className="header-logo">
+              <LogoContainer component={Link} to="/" className="header-logo">
+                <LogoImage src="/Logo.png" alt="GJCMELogo" />
                 Global Journal 
               </LogoContainer>
-             
             </Box>
             {isMobile ? (
               <Box sx={{ flexGrow: 0 }}>
