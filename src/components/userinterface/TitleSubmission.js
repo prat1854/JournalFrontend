@@ -100,7 +100,7 @@ export default function TitleSubmission() {
     setSubmissionError(null);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/titlesubmission/submit', {
+       const response = await axios.post('https://journalbackend-hy4q.onrender.com/api/titlesubmission/submit', {
         title,
         submitted_by: 1
       });

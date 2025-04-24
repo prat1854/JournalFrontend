@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL of your backend API
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://journalbackend-hy4q.onrender.com';
 
 // Create axios instance with default config
 const apiClient = axios.create({

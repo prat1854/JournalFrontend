@@ -183,7 +183,7 @@ export default function SignUpPage() {
       
       try {
         // Send form data to backend API
-        fetch('http://localhost:5000/auth/register', {
+        fetch('https://journalbackend-hy4q.onrender.com/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
